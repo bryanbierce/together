@@ -1,4 +1,5 @@
 import { Map } from 'immutable';
+// var Map = require('immutable').Map;
 
 const reducer = (state = new Map(), action) => {
   switch (action.type) {
@@ -10,3 +11,4 @@ const reducer = (state = new Map(), action) => {
 };
 
 export default reducer;
+// module.exports = reducer;

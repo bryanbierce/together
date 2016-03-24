@@ -1,19 +1,20 @@
-import Hapi from 'hapi';
-import Inert from 'inert';
-import Path from 'path';
+import Hapi from "hapi";
+import Inert from "inert";
+import Good from "good";
+import GoodConsole from "good-console";
+import Path from "path";
+import env from "../env.js";
 
-if (!process.env.LOCATION) {
-  require('../env.js')();
-}
+env();
 
 const server = new Hapi.Server({
   connections: {
     routes: {
       files: {
-        relativeTo: Path.join(__dirname, 'public'),
-      },
-    },
-  },
+        relativeTo: Path.join(__dirname, "public")
+      }
+    }
+  }
 });
 
 server.connection({ port: 4028 });
@@ -23,14 +24,14 @@ server.register(Inert, (err) => {
   if (err) throw err;
 
   server.route({
-    method: 'GET',
-    path: '/{param*}',
+    method: "GET",
+    path: "/{param*}",
     handler: {
       directory: {
-        path: 'path',
-        index: true,
-      },
-    },
+        path: "path",
+        index: true
+      }
+    }
   });
 });
 
@@ -43,18 +44,18 @@ function startServer() {
   });
 }
 
-if (process.env.LOCATION === 'DEVELOPMENT') {
+if (process.env.LOCATION === "DEVELOPMENT") {
   server.register({
-    register: require('good'),
+    register: Good,
     options: {
       reporters: [{
-        reporter: require('good-console'),
+        reporter: GoodConsole,
         events: {
-          response: '*',
-          log: '*',
-        },
-      }],
-    },
+          response: "*",
+          log: "*"
+        }
+      }]
+    }
   }, (err) => {
     if (err) throw err;
 

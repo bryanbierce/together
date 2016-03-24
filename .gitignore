@@ -1,2 +1,4 @@
 node_modules
 env.js
+public/bundle.js
+server/bundle.js
