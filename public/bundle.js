@@ -21136,11 +21136,13 @@
 /* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 	var _redux = __webpack_require__(165);
 
@@ -21156,9 +21158,13 @@
 	// var reducer = require('./reducer.js');
 	// var Map = require('immutable').Map;
 
-	var initialStore = new _immutable.Map();
+	var initialState = new _immutable.Map();
 
-	exports.default = (0, _redux.createStore)(_reducers2.default, initialStore);
+	var store = (0, _redux.createStore)(_reducers2.default, initialState, (0, _redux.compose)((typeof window === 'undefined' ? 'undefined' : _typeof(window)) === 'object' && typeof window.devToolsExtension !== 'undefined' ? window.devToolsExtension() : function (f) {
+	  return f;
+	}));
+
+	exports.default = store;
 	// module.exports = createStore(reducer, initialStore);
 
 /***/ },
@@ -26181,7 +26187,7 @@
 /* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -26197,9 +26203,9 @@
 
 	var Home = function Home() {
 	  return _react2.default.createElement(
-	    "h1",
+	    'h1',
 	    null,
-	    "Hello World!"
+	    'Hello World!'
 	  );
 	};
 

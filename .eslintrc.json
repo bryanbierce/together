@@ -4,7 +4,6 @@
         "react"
     ],
     "rules": {
-      "quotes": [2, "double", "avoid-escape"],
       "quote-props": [2, "consistent-as-needed"],
       "comma-dangle": [2, "never"]
     }

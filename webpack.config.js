@@ -5,13 +5,18 @@ const server = path.join(__dirname, 'server/server.js');
 
 module.exports = {
   context: __dirname,
-  entry: {
-    "public/bundle": './client/AppEntry.jsx',
-    "server/bundle": './server/server.js'
-  },
+  // entry: {
+  //   "public/bundle": './client/AppEntry.jsx',
+  //   "server/bundle": './server/server.js'
+  // },
+  entry: './client/AppEntry.jsx',
+  // output: {
+  //   path: path.join(__dirname, '/'),
+  //   filename: '[name].js'
+  // },
   output: {
-    path: path.join(__dirname, '/'),
-    filename: '[name].js'
+    path: path.join(__dirname, '/public'),
+    filename: 'bundle.js'
   },
   resolve: {
     extensions: ['', '.js', '.jsx', '.json']
