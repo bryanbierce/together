@@ -4,6 +4,7 @@ const client = path.join(__dirname, 'client/app.jsx');
 const server = path.join(__dirname, 'server/server.js');
 
 module.exports = {
+  devtool: 'source-map',
   context: __dirname,
   // entry: {
   //   "public/bundle": './client/AppEntry.jsx',

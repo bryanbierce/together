@@ -1,17 +1,35 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { Router, Route, hashHistory } from 'react-router';
 import store from './store.js';
-import Home from './Home.jsx';
-// var React = require('react');
-// var ReactDOM = require('react-dom');
-// var Provider = require('react-redux').Provider;
-// var store = require('./store.js');
-// var Home = require('./Home.jsx');
+import actions from './actions';
+import Home from './Home';
+import Group from './Group';
 
-ReactDOM.render(
-  <Provider store={store} >
-    <Home />
-  </Provider>,
-  document.getElementById('app')
-);
+class App extends React.Component {
+  assignGroup(nextState) {
+    //  Call to db to check if the room exists.
+    //  TODO
+    //  Fire action to set room
+    const action = actions.setGroup(nextState.params.groupName);
+    console.log(action);
+    store.dispatch(action);
+
+    return nextState;
+  }
+  render() {
+    return (
+      <Provider store={ store } >
+        <Router history={ hashHistory }>
+          <Route path="/" component={ Home } />
+          <Route path="/:groupName" component={ Group }
+            onEnter={ this.assignGroup }
+          />
+        </Router>
+      </Provider>
+    );
+  }
+}
+
+ReactDOM.render(<App />, document.getElementById('app'));
