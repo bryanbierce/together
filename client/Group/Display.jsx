@@ -13,12 +13,15 @@ const styles = {
 };
 
 const Display = (props) => (
-  <div className="display"
+  <div id="display"
     style={ styles.box }
   >
     {
-      props.photos.map((photo) => <PhotoTile photoURL={ photo } />)
+      props.photos.map((photo, i) => <PhotoTile photoURL={ photo } key={ i } />)
     }
+    <img className="tempStandIn" src="Pic1.png" />
+    <img className="tempStandIn" src="Pic2.png" />
+    <img id="temp" src="" />
   </div>
 );
 Display.propTypes = {
@@ -35,4 +38,4 @@ const mapStateToProps = (state) => (
   }
 );
 
-export default connect(mapStateToProps)(Display);
+export default connect(mapStateToProps, null, null, { pure: true })(Display);
