@@ -13,7 +13,6 @@ class App extends React.Component {
     //  TODO
     //  Fire action to set room
     const action = actions.setGroup(nextState.params.groupName);
-    console.log(action);
     store.dispatch(action);
 
     return nextState;
