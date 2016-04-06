@@ -1,4 +1,5 @@
 import React from 'react';
+const { func } = React.PropTypes;
 
 const styles = {
   box: {
@@ -16,8 +17,8 @@ class Home extends React.Component {
     this.handleCreateClick = this.handleCreateClick.bind(this);
   }
 
-  handleCreateClick(event) {
-    const groupName = document.getElementById('inputGroup').value.split(' ').join('-');
+  handleCreateClick() {
+    const groupName = document.getElementById('inputGroup').value.split(' ').join('_');
     //  call to database to see if group already exists
     this.props.history.push(`${groupName}`);
   }
@@ -39,5 +40,9 @@ class Home extends React.Component {
     );
   }
 }
+Home.propTypes = {
+  history: func
+};
+
 
 export default Home;

@@ -7,8 +7,8 @@ const Camera = (props) => (
     style={ styles.box }
   >
     <video id="video"
-      style={{ width: 400, height: 300 }}
-    >Video stream not available.</video>
+      style={ styles.picSize }
+    ></video>
     <a id="startButton"
       onClick={ props.handleStartClick }
       style={ styles.button }

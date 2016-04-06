@@ -11,6 +11,15 @@ const styles = {
     color: '#fff',
     textAlign: 'center',
     textDecoration: 'none'
+  },
+  picSize: {
+    width: 400,
+    height: 300
+  },
+  capture: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center'
   }
 };
 

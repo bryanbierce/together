@@ -7,7 +7,7 @@ const Photo = (props) => (
     style={ styles.box }
   >
     <img id="photo" alt="Your photo"
-      style={{ width: 400, height: 300 }}
+      style={ styles.picSize }
     />
     <a id="saveButton"
       onClick={ props.handleSaveClick }

@@ -1,7 +1,9 @@
 import { Map } from 'immutable';
-// var Map = require('immutable').Map;
+import html2canvas from '../utils/html2canvas';
 
-const submitFinal = (state) => {
+const addPhoto = (state, photo) => state.update('photos', (photos) => photos.push(photo));
+
+const submitFinal = () => {
   //  grab the final photo
   const display = document.getElementById('display');
   const temp = document.getElementById('temp');
@@ -17,6 +19,8 @@ const submitFinal = (state) => {
 
 const reducer = (state = new Map(), action) => {
   switch (action.type) {
+    case 'ADD_PHOTO':
+      return addPhoto(state, action.photo);
     case 'SET_STATE':
       return state;
     case 'SET_GROUP_NAME':
