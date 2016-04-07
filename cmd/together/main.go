@@ -33,7 +33,7 @@ func main() {
 
 	http.HandleFunc("/api/", handleAPI(session))
 
-	http.Handle("/", http.FileServer(http.Dir("../../public")))
+	http.Handle("/", http.FileServer(http.Dir("./public")))
 
 	fmt.Println("Server running on port 4028")
 	http.ListenAndServe(":"+port, nil)
