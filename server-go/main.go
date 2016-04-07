@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"strings"
 
@@ -24,7 +23,7 @@ func main() {
 	})
 
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err, "establishing db connection")
 	}
 
 	http.Handle("/sockets/groupConnect", websocket.Handler(groupConnect(session)))
@@ -38,32 +37,25 @@ func main() {
 }
 
 func groupConnect(s *re.Session) func(ws *websocket.Conn) {
+
 	return func(ws *websocket.Conn) {
-		fmt.Println("inside socket handler")
-
-		var err error
-		// TODO grab a *Conn config struct for groupName off url
-		//      setup chanes feed on group table
+		var groupName string
 		for {
-			type Photo struct {
-				photo string
-			}
-
-			var data Photo
-
-			if err = websocket.JSON.Receive(ws, &data); err != nil {
-				log.Fatal(err)
+			if err := websocket.Message.Receive(ws, &groupName); err != nil {
 				fmt.Println("Can't receive")
-				break
+			} else if groupName != "" {
+				readInitialPics(ws, groupName, s)
+
+				res, err := re.DB("together").Table(groupName).Changes().Run(s)
+				if err != nil {
+					fmt.Println(err, "in change feed connection")
+				}
+				var value interface{}
+
+				for res.Next(&value) {
+					websocket.JSON.Send(ws, value)
+				}
 			}
-
-			fmt.Println("Received back from client")
-
-			if err = websocket.JSON.Send(ws, data.photo); err != nil {
-				fmt.Println("Can't send data")
-				break
-			}
-
 		}
 	}
 }
@@ -79,32 +71,13 @@ func handleAPI(s *re.Session) func(w http.ResponseWriter, req *http.Request) {
 				err := re.DB("together").TableCreate(parts[3]).Exec(s)
 
 				if err != nil {
-					cursor, err := re.DB("together").Table(parts[3]).Run(s)
-					defer cursor.Close()
-
-					if err != nil {
-						fmt.Println(err, " in getting table values")
-					}
-
-					var response []interface{}
-					err = cursor.All(&response)
-
-					if err != nil {
-						fmt.Println(err, " getting data from cursor")
-					}
-
-					jsonData, err := json.Marshal(response)
-
-					if err != nil {
-						fmt.Println(err, " marshalling data")
-					}
-
 					w.WriteHeader(200)
-					w.Header().Set("Content-Type", "application/json")
-					w.Write(jsonData)
+					w.Write([]byte("Groupe exists"))
+					req.Body.Close()
 				} else {
 					w.WriteHeader(201)
-					w.Write([]byte("Table created or exists"))
+					w.Write([]byte("Group created"))
+					req.Body.Close()
 				}
 			} else if parts[2] == "postPhoto" {
 				fmt.Println("In postPhoto")
@@ -113,21 +86,36 @@ func handleAPI(s *re.Session) func(w http.ResponseWriter, req *http.Request) {
 				var photo PhotoData
 
 				err := decoder.Decode(&photo)
-
 				if err != nil {
 					fmt.Println(err, " decoding JSON")
 				}
-				// TODO finish receiving images on a post
-				_, err = re.DB("together").Table(parts[3]).Insert(photo).RunWrite(s)
 
+				_, err = re.DB("together").Table(parts[3]).Insert(photo).RunWrite(s)
 				if err != nil {
 					fmt.Println(err)
 				}
+
+				w.WriteHeader(201)
+				w.Write([]byte("Photo saved"))
+				req.Body.Close()
 			}
 		} else {
 			w.WriteHeader(404)
 			w.Write([]byte("You reached a dead end in the api!"))
+			req.Body.Close()
 		}
+	}
+}
 
+func readInitialPics(ws *websocket.Conn, groupName string, s *re.Session) {
+	cursor, err := re.DB("together").Table(groupName).Run(s)
+	defer cursor.Close()
+	if err != nil {
+		fmt.Println(err, " in getting table values")
+	}
+
+	var response interface{}
+	for cursor.Next(&response) {
+		websocket.JSON.Send(ws, response)
 	}
 }

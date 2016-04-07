@@ -19,10 +19,6 @@ const Display = (props) => (
     {
       props.photos.map((photo, i) => <PhotoTile photoURL={ photo } key={ i } />)
     }
-    {/*<img className="tempStandIn" src="Pic1.png" />
-    <img className="tempStandIn" src="Pic2.png" />*/}
-    <br />
-    <img id="temp" src="" />
   </div>
 );
 Display.propTypes = {

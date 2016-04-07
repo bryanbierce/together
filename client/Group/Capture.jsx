@@ -1,10 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
+// import pngjs from 'pngjs';
 import Camera from './Capture/Camera';
 import Photo from './Capture/Photo';
+// import Download from './Capture/Dashboard/Download';
+// import SubmitFinal from './Capture/Dashboard/SubmitFinal';
+import Dashboard from './Capture/Dashboard.jsx';
+import actions from '../actions';
 import styles from './Capture/styles';
-const { string } = React.PropTypes;
+// const PNG = pngjs.PNG;
+const { string, func, bool } = React.PropTypes;
 
 
 class Capture extends React.Component {
@@ -17,10 +23,13 @@ class Capture extends React.Component {
     };
 
     this.clearPhoto = this.clearPhoto.bind(this);
+    this.downloadFinal = this.downloadFinal.bind(this);
     this.establishSocket = this.establishSocket.bind(this);
     this.handleSaveClick = this.handleSaveClick.bind(this);
+    this.handleSubmitFinal = this.handleSubmitFinal.bind(this);
     this.handleStartClick = this.handleStartClick.bind(this);
     this.savePhoto = this.savePhoto.bind(this);
+    this.submitFinal = this.submitFinal.bind(this);
     this.takePicture = this.takePicture.bind(this);
   }
 
@@ -61,28 +70,33 @@ class Capture extends React.Component {
     photo.setAttribute('src', data);
   }
 
+  downloadFinal() {
+    window.open(this.props.finalPhoto, '_blank');
+  }
+
   establishSocket() {
     const wsuri = 'ws://localhost:4028/sockets/groupConnect';
 
     const sock = new WebSocket(wsuri);
     sock.onmessage = (msg) => {
-      if (msg.data === 'start') {
-        this.state.newPhoto = '';
-      } else if (msg.data) {
-        this.state.newPhoto += msg.data;
-      } else if (msg.data === 'end') {
-        const photo = document.getElementById('photo');
-        photo.setAttribute('src', this.state.newPhoto);
-      }
+      const data = JSON.parse(msg.data);
+      const photo = data.new_val !== undefined ? data.new_val.photo : data.photo;
+      this.props.addPhoto(photo);
     };
     sock.onopen = () => {
       this.state.sock = sock;
+      sock.send(this.props.groupName);
     };
   }
 
   handleSaveClick(event) {
     event.preventDefault();
     this.savePhoto();
+  }
+
+  handleSubmitFinal(event) {
+    event.preventDefault();
+    this.submitFinal();
   }
 
   handleStartClick(event) {
@@ -93,21 +107,34 @@ class Capture extends React.Component {
   savePhoto() {
     const photo = document.getElementById('photo').src;
     const groupName = this.props.groupName;
-    console.log(groupName);
     axios.post(`/api/group/postPhoto/${groupName}`, { photo })
-    .then((res) => {
-      console.log(res);
-    })
     .catch((err) => {
       console.log(err);
     });
   }
 
+  submitFinal() {
+    const display = document.getElementById('display');
+
+    html2canvas(display, {
+      onrendered: (canvas) => {
+        const result = canvas.toDataURL('image/png')
+        // console.log(result.slice(0, 40));
+        // const trimResult = result.replace(/^data:image\/png;base64,/, '');
+        // const buffer = new Buffer(trimResult, 'base64');
+        // const blob = new Blob([result]);
+        // const blobURL = window.URL.createObjectURL(blob);
+        // const png = PNG.sync.read(buffer);
+        this.props.submitFinal(result);
+      }
+    }, { allowTaint: true });
+  }
+
   takePicture() {
     const canvas = document.querySelector('canvas');
     const context = canvas.getContext('2d');
-    const video = document.querySelector('video');
     const photo = document.getElementById('photo');
+    const video = document.querySelector('video');
     const { width, height } = this.state.constraints.video;
 
     canvas.width = width;
@@ -121,25 +148,49 @@ class Capture extends React.Component {
   render() {
     return (
       <div className="capture"
-        style={ styles.capture }
+        style={ styles.simpleBoxColumn }
       >
-        <Camera
-          handleStartClick={ this.handleStartClick }
+        <div className="views"
+          style={ styles.capture }
+        >
+          <Camera
+            handleStartClick={ this.handleStartClick }
+          />
+          <canvas id="canvas"
+            style={ styles.picSize }
+            hidden
+          ></canvas>
+          <Photo handleSaveClick={ this.handleSaveClick } />
+        </div>
+        <Dashboard
+          downloadFinal={ this.downloadFinal }
+          finalPhoto={ this.props.finalPhoto }
+          groupName={ this.props.groupName }
+          handleSubmitFinal={ this.handleSubmitFinal }
+          isFinal={ this.props.isFinal }
         />
-        <canvas id="canvas"
-          style={ styles.picSize }
-          hidden
-        ></canvas>
-        <Photo handleSaveClick={ this.handleSaveClick } />
       </div>
     );
   }
 }
 Capture.propTypes = {
-  groupName: string
+  addPhoto: func,
+  finalPhoto: string,
+  groupName: string,
+  isFinal: bool,
+  submitFinal: func
 };
 
 
-const mapStateToProps = (state) => ({ groupName: state.get('groupName') });
+const mapDispatchToProps = (dispatch) => ({
+  addPhoto: (photo) => dispatch(actions.addPhoto(photo)),
+  submitFinal: (finalPhoto) => dispatch(actions.submitFinal(finalPhoto))
+});
 
-export default connect(mapStateToProps)(Capture);
+const mapStateToProps = (state) => ({
+  finalPhoto: state.get('finalPhoto'),
+  groupName: state.get('groupName'),
+  isFinal: state.get('isFinal')
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Capture);

@@ -5,6 +5,14 @@ const styles = {
     border: '10px solid #ddd',
     backgroundColor: '#ccc'
   },
+  dashboardBox: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignContent: 'center',
+    border: '5px solid #ddd',
+    backgroundColor: '#ccc',
+    height: 50
+  },
   button: {
     flexGrow: 1,
     backgroundColor: 'cornflowerblue',
@@ -20,6 +28,14 @@ const styles = {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center'
+  },
+  simpleBoxRow: {
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  simpleBoxColumn: {
+    display: 'flex',
+    flexDirection: 'column'
   }
 };
 

@@ -11,24 +11,16 @@ import Group from './Group';
 
 class App extends React.Component {
   assignGroup(nextState, replace) {
-    //  Call to db to check if the room exists.
-    //  TODO
-    //  Fire action to set room
-    console.log("In onEnter", nextState.params.groupName);
     const groupName = nextState.params.groupName;
+    const action = actions.setGroup(groupName);
+    store.dispatch(action);
     axios.post(`/api/group/create/${groupName}`)
-    .then((res) => {
-      console.log(res);
-      const action = actions.setGroup(groupName);
-      store.dispatch(action);
-
-      return nextState;
-    })
-    .catch((err) => {
-      console.log(err);
+    .then(() => nextState)
+    .catch(() => {
       replace('/');
     });
   }
+
   render() {
     return (
       <Provider store={ store } >
