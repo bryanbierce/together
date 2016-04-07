@@ -10,10 +10,11 @@ const initialState = new Map({
   isFinal: false
 });
 
-const store = createStore(reducer, initialState, compose(
-  typeof window === 'object' && typeof window.devToolsExtension !== 'undefined'
-    ? window.devToolsExtension()
-    : (f) => f
-));
+// const store = createStore(reducer, initialState, compose(
+//   typeof window === 'object' && typeof window.devToolsExtension !== 'undefined'
+//     ? window.devToolsExtension()
+//     : (f) => f
+// ));
+const store = createStore(reducer, initialState);
 
 export default store;

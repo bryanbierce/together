@@ -35,6 +35,4 @@ class App extends React.Component {
   }
 }
 
-// const mapDispatchToProps = (dispatch) => ({ addPhoto: (photo) => dispatch(addPhoto(photo)) });
-
 ReactDOM.render(<App />, document.getElementById('app'));

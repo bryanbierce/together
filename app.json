@@ -1,0 +1,16 @@
+{
+  "name": "together",
+  "description": "Remote Group Photo Booth",
+  "keywords": [
+    "go",
+    "react",
+    "es6",
+    "redux",
+    "webRTC",
+    "example"
+  ],
+  "image": "heroku/go:1.6",
+  "mount_dir": "src/github.com/bryanbierce/together",
+  "website": "http://github.com/bryanbierce/together",
+  "repository": "http://github.com/together/together"
+}
