@@ -32682,7 +32682,7 @@
 	    value: function establishSocket() {
 	      var _this2 = this;
 	
-	      var wsuri = 'ws://localhost:4028/sockets/groupConnect';
+	      var wsuri = 'wss://localhost:4028/sockets/groupConnect';
 	
 	      var sock = new WebSocket(wsuri);
 	      sock.onmessage = function (msg) {
