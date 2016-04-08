@@ -1,15 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
-// import pngjs from 'pngjs';
 import Camera from './Capture/Camera';
 import Photo from './Capture/Photo';
-// import Download from './Capture/Dashboard/Download';
-// import SubmitFinal from './Capture/Dashboard/SubmitFinal';
 import Dashboard from './Capture/Dashboard.jsx';
 import actions from '../actions';
 import styles from './Capture/styles';
-// const PNG = pngjs.PNG;
 const { string, func, bool } = React.PropTypes;
 
 
@@ -80,7 +76,7 @@ class Capture extends React.Component {
     const sock = new WebSocket(wsuri);
     sock.onmessage = (msg) => {
       const data = JSON.parse(msg.data);
-      const photo = data.new_val !== undefined ? data.new_val.photo : data.photo;
+      const photo = data.new_val !== undefined ? data.new_val : data;
       this.props.addPhoto(photo);
     };
     sock.onopen = () => {
@@ -107,7 +103,8 @@ class Capture extends React.Component {
   savePhoto() {
     const photo = document.getElementById('photo').src;
     const groupName = this.props.groupName;
-    axios.post(`/api/group/postPhoto/${groupName}`, { photo })
+    const hashID = location.hash.split('?')[1];
+    axios.post(`/api/group/postPhoto/${groupName}`, { photo, hashID })
     .catch((err) => {
       console.log(err);
     });

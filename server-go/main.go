@@ -13,7 +13,8 @@ import (
 
 // PhotoData is a row in the db for an individual photo
 type PhotoData struct {
-	Photo string `gorethink:"photo"`
+	Photo  string `gorethink:"photo"`
+	HashID string `gorethink:"hashID"`
 }
 
 func main() {
@@ -37,7 +38,6 @@ func main() {
 }
 
 func groupConnect(s *re.Session) func(ws *websocket.Conn) {
-
 	return func(ws *websocket.Conn) {
 		var groupName string
 		for {
@@ -62,7 +62,6 @@ func groupConnect(s *re.Session) func(ws *websocket.Conn) {
 
 func handleAPI(s *re.Session) func(w http.ResponseWriter, req *http.Request) {
 	return func(w http.ResponseWriter, req *http.Request) {
-		fmt.Println("In api")
 		path := req.URL.Path
 		parts := strings.Split(path, "/")[1:]
 
@@ -80,8 +79,6 @@ func handleAPI(s *re.Session) func(w http.ResponseWriter, req *http.Request) {
 					req.Body.Close()
 				}
 			} else if parts[2] == "postPhoto" {
-				fmt.Println("In postPhoto")
-
 				decoder := json.NewDecoder(req.Body)
 				var photo PhotoData
 
