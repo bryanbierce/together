@@ -21623,7 +21623,8 @@
 	var objectCtorString = funcToString.call(Object);
 	
 	/**
-	 * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+	 * Used to resolve the
+	 * [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
 	 * of values.
 	 */
 	var objectToString = objectProto.toString;
@@ -22094,7 +22095,8 @@
 	var objectCtorString = funcToString.call(Object);
 	
 	/**
-	 * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+	 * Used to resolve the
+	 * [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
 	 * of values.
 	 */
 	var objectToString = objectProto.toString;
@@ -27356,10 +27358,9 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var pics = [];
 	var initialState = new _immutable.Map({
 	  groupName: '',
-	  photos: new _immutable.List(pics),
+	  photos: new _immutable.Map(),
 	  finalPhoto: null,
 	  isFinal: false
 	});
@@ -27386,9 +27387,7 @@
 	var _immutable = __webpack_require__(257);
 	
 	var addPhoto = function addPhoto(state, photo) {
-	  return state.update('photos', function (photos) {
-	    return photos.push(photo);
-	  });
+	  return state.setIn(['photos', photo.hashID], photo.photo);
 	};
 	
 	var submitFinal = function submitFinal(state, finalPhoto) {
@@ -32542,11 +32541,11 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Group = function Group() {
+	var Group = function Group(props) {
 	  return _react2.default.createElement(
 	    'div',
 	    { className: 'group' },
-	    _react2.default.createElement(_Capture2.default, null),
+	    _react2.default.createElement(_Capture2.default, { history: props.params }),
 	    _react2.default.createElement(_Display2.default, null)
 	  );
 	};
@@ -32602,13 +32601,7 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	// import pngjs from 'pngjs';
 	
-	// import Download from './Capture/Dashboard/Download';
-	// import SubmitFinal from './Capture/Dashboard/SubmitFinal';
-	
-	
-	// const PNG = pngjs.PNG;
 	var _React$PropTypes = _react2.default.PropTypes;
 	var string = _React$PropTypes.string;
 	var func = _React$PropTypes.func;
@@ -32694,7 +32687,7 @@
 	      var sock = new WebSocket(wsuri);
 	      sock.onmessage = function (msg) {
 	        var data = JSON.parse(msg.data);
-	        var photo = data.new_val !== undefined ? data.new_val.photo : data.photo;
+	        var photo = data.new_val !== undefined ? data.new_val : data;
 	        _this2.props.addPhoto(photo);
 	      };
 	      sock.onopen = function () {
@@ -32725,7 +32718,8 @@
 	    value: function savePhoto() {
 	      var photo = document.getElementById('photo').src;
 	      var groupName = this.props.groupName;
-	      _axios2.default.post('/api/group/postPhoto/' + groupName, { photo: photo }).catch(function (err) {
+	      var hashID = location.hash.split('?')[1];
+	      _axios2.default.post('/api/group/postPhoto/' + groupName, { photo: photo, hashID: hashID }).catch(function (err) {
 	        console.log(err);
 	      });
 	    }
@@ -33199,9 +33193,13 @@
 	    { id: 'display',
 	      style: styles.box
 	    },
-	    props.photos.map(function (photo, i) {
-	      return _react2.default.createElement(_PhotoTile2.default, { photoURL: photo, key: i });
-	    })
+	    function () {
+	      var PhotoTiles = [];
+	      props.photos.forEach(function (photo, i) {
+	        PhotoTiles.push(_react2.default.createElement(_PhotoTile2.default, { photoURL: photo, key: i }));
+	      });
+	      return PhotoTiles;
+	    }()
 	  );
 	};
 	Display.propTypes = {
