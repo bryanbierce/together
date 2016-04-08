@@ -31,7 +31,7 @@ func main() {
 	}
 
 	server := websocket.Server{
-		Handshake: func(config *websocket.Config, req *http.Request) err {
+		Handshake: func(config *websocket.Config, req *http.Request) error {
 			return nil
 		},
 		Handler: websocket.Handler(groupConnect(session)),
