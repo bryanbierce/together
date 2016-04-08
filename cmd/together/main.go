@@ -30,7 +30,14 @@ func main() {
 		fmt.Println(err, "establishing db connection")
 	}
 
-	http.Handle("/sockets/groupConnect", websocket.Handler(groupConnect(session)))
+	server := websocket.Server{
+		Handshake: func(config *websocket.Config, req *http.Request) err {
+			return nil
+		},
+		Handler: websocket.Handler(groupConnect(session)),
+	}
+
+	http.Handle("/sockets/groupConnect", websocket.Handler(server.Handler))
 
 	http.HandleFunc("/api/", handleAPI(session))
 
