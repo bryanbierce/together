@@ -17,7 +17,13 @@ const Display = (props) => (
     style={ styles.box }
   >
     {
-      props.photos.map((photo, i) => <PhotoTile photoURL={ photo } key={ i } />)
+      (() => {
+        const PhotoTiles = [];
+        props.photos.forEach((photo, i) => {
+          PhotoTiles.push(<PhotoTile photoURL={ photo } key={ i } />);
+        });
+        return PhotoTiles;
+      })()
     }
   </div>
 );

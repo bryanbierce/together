@@ -1,11 +1,11 @@
 import { createStore, compose } from 'redux';
 import reducer from './reducers';
-import { Map, List } from 'immutable';
+import { Map } from 'immutable';
 
-const pics = [];
+
 const initialState = new Map({
   groupName: '',
-  photos: new List(pics),
+  photos: new Map(),
   finalPhoto: null,
   isFinal: false
 });

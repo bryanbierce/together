@@ -1,6 +1,6 @@
 import { Map } from 'immutable';
 
-const addPhoto = (state, photo) => state.update('photos', (photos) => photos.push(photo));
+const addPhoto = (state, photo) => state.setIn(['photos', photo.hashID], photo.photo);
 
 const submitFinal = (state, finalPhoto) => state.set('finalPhoto', finalPhoto).set('isFinal', true);
 

@@ -2,9 +2,9 @@ import React from 'react';
 import Capture from './Group/Capture';
 import Display from './Group/Display';
 
-const Group = () => (
+const Group = (props) => (
   <div className="group">
-    <Capture />
+    <Capture history={ props.params } />
     <Display />
   </div>
 );
