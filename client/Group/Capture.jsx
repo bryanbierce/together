@@ -71,7 +71,7 @@ class Capture extends React.Component {
   }
 
   establishSocket() {
-    const wsuri = 'wss://localhost:4028/sockets/groupConnect';
+    const wsuri = 'wss://photo-together.herokuapp.com/sockets/groupConnect';
 
     const sock = new WebSocket(wsuri);
     sock.onmessage = (msg) => {
