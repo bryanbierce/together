@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 
 	"golang.org/x/net/websocket"
@@ -18,8 +19,10 @@ type PhotoData struct {
 }
 
 func main() {
+	port := os.Getenv("PORT")
+
 	session, err := re.Connect(re.ConnectOpts{
-		Address:  "localhost:28015",
+		Address:  "127.0.0.1:28015",
 		Database: "together",
 	})
 
@@ -27,14 +30,21 @@ func main() {
 		fmt.Println(err, "establishing db connection")
 	}
 
-	http.Handle("/sockets/groupConnect", websocket.Handler(groupConnect(session)))
+	server := websocket.Server{
+		Handshake: func(config *websocket.Config, req *http.Request) error {
+			return nil
+		},
+		Handler: websocket.Handler(groupConnect(session)),
+	}
+
+	http.Handle("/sockets/groupConnect", websocket.Handler(server.Handler))
 
 	http.HandleFunc("/api/", handleAPI(session))
 
-	http.Handle("/", http.FileServer(http.Dir("../public")))
+	http.Handle("/", http.FileServer(http.Dir("./public")))
 
 	fmt.Println("Server running on port 4028")
-	http.ListenAndServe(":4028", nil)
+	http.ListenAndServe(":"+port, nil)
 }
 
 func groupConnect(s *re.Session) func(ws *websocket.Conn) {
