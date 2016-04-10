@@ -3,10 +3,7 @@ server/bundle.js
 public/Pic1.png
 public/Pic2.png
 test/
-package.json
-webpack.config.js
 .eslintignore
 .eslintrc.json
-.babelrc
 node_modules
-client
+public/bundle.js

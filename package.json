@@ -4,9 +4,7 @@
   "description": "",
   "main": "server/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server/server.js",
-    "watch": "webpack --watch"
+    "postinstall": "webpack"
   },
   "author": "Bryan Bierce",
   "license": "MIT",
@@ -35,8 +33,6 @@
     "eslint": "^2.4.0",
     "eslint-config-airbnb": "^6.0.2",
     "eslint-plugin-react": "^4.1.0",
-    "good": "^6.6.0",
-    "good-console": "^5.3.1",
     "redux-devtools": "^3.1.1",
     "redux-devtools-dock-monitor": "^1.1.0",
     "redux-devtools-log-monitor": "^1.0.4",

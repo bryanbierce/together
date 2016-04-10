@@ -1,6 +1,14 @@
 {
   "name": "together",
   "description": "Remote Group Photo Booth",
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-nodejs"
+    },
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-go"
+    }
+  ],
   "keywords": [
     "go",
     "react",
