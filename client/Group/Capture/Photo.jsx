@@ -7,7 +7,7 @@ const Photo = (props) => (
     style={ styles.box }
   >
     <img id="photo" alt="Your photo"
-      style={ styles.picSize }
+      style={ styles.capturePic }
     />
     <a id="saveButton"
       onClick={ props.handleSaveClick }
