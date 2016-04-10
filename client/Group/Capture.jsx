@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import Camera from './Capture/Camera';
 import Photo from './Capture/Photo';
+import LinkButton from './Capture/LinkButton';
 import Dashboard from './Capture/Dashboard.jsx';
 import actions from '../actions';
 import styles from './Capture/styles';
@@ -21,6 +22,7 @@ class Capture extends React.Component {
     this.clearPhoto = this.clearPhoto.bind(this);
     this.downloadFinal = this.downloadFinal.bind(this);
     this.establishSocket = this.establishSocket.bind(this);
+    this.getLink = this.getLink.bind(this);
     this.handleSaveClick = this.handleSaveClick.bind(this);
     this.handleSubmitFinal = this.handleSubmitFinal.bind(this);
     this.handleStartClick = this.handleStartClick.bind(this);
@@ -85,6 +87,16 @@ class Capture extends React.Component {
     };
   }
 
+  getLink() {
+    const link = document.getElementById('roomLink');
+    const range = document.createRange();
+    range.selectNodeContents(link);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+    document.execCommand('copy');
+  }
+
   handleSaveClick(event) {
     event.preventDefault();
     this.savePhoto();
@@ -144,12 +156,13 @@ class Capture extends React.Component {
 
   render() {
     return (
-      <div className="capture"
+      <div id="captureColumn"
         style={ styles.simpleBoxColumn }
       >
-        <div className="views"
-          style={ styles.capture }
+        <div id="captureRow"
+          style={ styles.captureRow }
         >
+          <Photo handleSaveClick={ this.handleSaveClick } />
           <Camera
             handleStartClick={ this.handleStartClick }
           />
@@ -157,7 +170,7 @@ class Capture extends React.Component {
             style={ styles.picSize }
             hidden
           ></canvas>
-          <Photo handleSaveClick={ this.handleSaveClick } />
+          <LinkButton getLink={ this.getLink } />
         </div>
         <Dashboard
           downloadFinal={ this.downloadFinal }

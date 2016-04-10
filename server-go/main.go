@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 	"strings"
 
 	"golang.org/x/net/websocket"
@@ -19,8 +18,6 @@ type PhotoData struct {
 }
 
 func main() {
-	port := os.Getenv("PORT")
-
 	session, err := re.Connect(re.ConnectOpts{
 		Address:  "127.0.0.1:28015",
 		Database: "together",
@@ -41,10 +38,10 @@ func main() {
 
 	http.HandleFunc("/api/", handleAPI(session))
 
-	http.Handle("/", http.FileServer(http.Dir("./public")))
+	http.Handle("/", http.FileServer(http.Dir("../public")))
 
 	fmt.Println("Server running on port 4028")
-	http.ListenAndServe(":"+port, nil)
+	http.ListenAndServe(":4028", nil)
 }
 
 func groupConnect(s *re.Session) func(ws *websocket.Conn) {

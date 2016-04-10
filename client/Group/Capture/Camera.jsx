@@ -7,7 +7,7 @@ const Camera = (props) => (
     style={ styles.box }
   >
     <video id="video"
-      style={ styles.picSize }
+      style={ styles.capturePic }
     ></video>
     <a id="startButton"
       onClick={ props.handleStartClick }
