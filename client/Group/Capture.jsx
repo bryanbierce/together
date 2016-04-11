@@ -127,13 +127,7 @@ class Capture extends React.Component {
 
     html2canvas(display, {
       onrendered: (canvas) => {
-        const result = canvas.toDataURL('image/png')
-        // console.log(result.slice(0, 40));
-        // const trimResult = result.replace(/^data:image\/png;base64,/, '');
-        // const buffer = new Buffer(trimResult, 'base64');
-        // const blob = new Blob([result]);
-        // const blobURL = window.URL.createObjectURL(blob);
-        // const png = PNG.sync.read(buffer);
+        const result = canvas.toDataURL('image/png');
         this.props.submitFinal(result);
       }
     }, { allowTaint: true });
