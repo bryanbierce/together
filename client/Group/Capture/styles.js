@@ -7,10 +7,18 @@ const styles = {
   },
   button: {
     flexGrow: 1,
+    display: 'flex',
+    justifyContent: 'center',
     backgroundColor: 'cornflowerblue',
     color: '#fff',
     textAlign: 'center',
-    textDecoration: 'none'
+    textDecoration: 'none',
+    margin: '5 0 0 0',
+    height: '25px',
+    boxShadow: '0px 0px 3px 1px rgba(0,0,0,0.5)'
+  },
+  buttonText: {
+    alignSelf: 'center'
   },
   captureRow: {
     display: 'flex',
@@ -22,7 +30,8 @@ const styles = {
   capturePic: {
     alignSelf: 'center',
     width: 400,
-    height: 300
+    height: 300,
+    boxShadow: '0px 0px 3px 1px rgba(0,0,0,0.5)'
   },
   dashboardBox: {
     display: 'flex',
@@ -39,7 +48,8 @@ const styles = {
     backgroundColor: 'cornflowerblue',
     margin: '15px',
     height: '50px',
-    width: '50px'
+    width: '50px',
+    boxShadow: '0px 0px 3px 1px rgba(0,0,0,0.5)'
   },
   linkIcon: {
     alignSelf: 'center',
@@ -56,7 +66,8 @@ const styles = {
   },
   simpleBoxColumn: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    margin: 15
   }
 };
 

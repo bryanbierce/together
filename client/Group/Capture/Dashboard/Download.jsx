@@ -3,12 +3,16 @@ import styles from './styles';
 const { string, func } = React.PropTypes;
 
 const Download = (props) => (
-    <a id="downloadButton"
+    <div id="downloadButton"
       href={ props.finalPhoto }
       download={ `${props.groupName}-Together.png` }
       onClick={ props.downloadFinal }
       style={ styles.button }
-    >Download Final Photo</a>
+    >
+      <a
+        style={ styles.buttonText }
+      >Download Final Photo</a>
+    </div>
 );
 Download.propTypes = {
   downloadFinal: func,

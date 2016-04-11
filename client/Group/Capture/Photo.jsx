@@ -9,10 +9,14 @@ const Photo = (props) => (
     <img id="photo" alt="Your photo"
       style={ styles.capturePic }
     />
-    <a id="saveButton"
+    <div id="saveButton"
       onClick={ props.handleSaveClick }
       style={ styles.button }
-    >Save Photo</a>
+    >
+      <a
+        style={ styles.buttonText }
+      >Save Photo</a>
+    </div>
   </div>
 );
 Photo.propTypes = {

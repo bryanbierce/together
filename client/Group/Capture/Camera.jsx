@@ -9,10 +9,14 @@ const Camera = (props) => (
     <video id="video"
       style={ styles.capturePic }
     ></video>
-    <a id="startButton"
+    <div id="startButton"
       onClick={ props.handleStartClick }
       style={ styles.button }
-    >Take photo</a>
+    >
+      <a
+        style={ styles.buttonText }
+      >Take Photo</a>
+    </div>
   </div>
 );
 

@@ -54,7 +54,17 @@ func groupConnect(s *re.Session) func(ws *websocket.Conn) {
 			if err := websocket.Message.Receive(ws, &groupName); err != nil {
 				fmt.Println("Can't receive")
 			} else if groupName != "" {
-				readInitialPics(ws, groupName, s)
+				cursor, err := re.DB("together").Table(groupName).Run(s)
+				if err != nil {
+					fmt.Println(err, " in getting table values")
+				}
+
+				var response interface{}
+				for cursor.Next(&response) {
+					websocket.JSON.Send(ws, response)
+				}
+
+				cursor.Close()
 
 				res, err := re.DB("together").Table(groupName).Changes().Run(s)
 				if err != nil {
@@ -111,18 +121,5 @@ func handleAPI(s *re.Session) func(w http.ResponseWriter, req *http.Request) {
 			w.Write([]byte("You reached a dead end in the api!"))
 			req.Body.Close()
 		}
-	}
-}
-
-func readInitialPics(ws *websocket.Conn, groupName string, s *re.Session) {
-	cursor, err := re.DB("together").Table(groupName).Run(s)
-	defer cursor.Close()
-	if err != nil {
-		fmt.Println(err, " in getting table values")
-	}
-
-	var response interface{}
-	for cursor.Next(&response) {
-		websocket.JSON.Send(ws, response)
 	}
 }

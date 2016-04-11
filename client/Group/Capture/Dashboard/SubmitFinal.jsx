@@ -4,10 +4,14 @@ const { func } = React.PropTypes;
 
 
 const SubmitFinal = (props) => (
-    <a id="finalSubmitButton"
+    <div id="finalSubmitButton"
       onClick={ props.handleSubmitFinal }
       style={ styles.button }
-    >Submit Group Photo</a>
+    >
+      <a
+        style={ styles.buttonText }
+      >Submit Group Photo</a>
+    </div>
 );
 SubmitFinal.propTypes = {
   handleSubmitFinal: func
