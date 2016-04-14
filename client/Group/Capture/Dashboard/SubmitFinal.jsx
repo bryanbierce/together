@@ -7,6 +7,8 @@ const SubmitFinal = (props) => (
     <div id="finalSubmitButton"
       onClick={ props.handleSubmitFinal }
       style={ styles.button }
+      onMouseEnter={ props.mouseEnter }
+      onMouseExit={ props.MouseLeave }
     >
       <a
         style={ styles.buttonText }
