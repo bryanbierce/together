@@ -1,0 +1,21 @@
+@import 'client/styles/components/base';
+
+#camera {
+  @include flex($direction: column);
+  border: 10px solid $backgroundLight;
+  background-color: $backgroundLight;
+
+  #video {
+    @include picSize();
+  }
+
+  #startButton {
+    @include button();
+    margin: 5 0 0 0;
+    height: 25px;
+    box-shadow: $standardShadow;
+    p {
+      @include buttonText();
+    }
+  }
+}

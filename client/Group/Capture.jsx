@@ -6,7 +6,7 @@ import Photo from './Capture/Photo';
 import LinkButton from './Capture/LinkButton';
 import Dashboard from './Capture/Dashboard.jsx';
 import actions from '../actions';
-import styles from './Capture/styles';
+import '../styles/components/capture';
 const { string, func, bool } = React.PropTypes;
 
 
@@ -20,7 +20,7 @@ class Capture extends React.Component {
     };
 
     this.clearPhoto = this.clearPhoto.bind(this);
-    this.downloadFinal = this.downloadFinal.bind(this);
+    this.downloadFinal.bind(this);
     this.establishSocket = this.establishSocket.bind(this);
     this.getLink = this.getLink.bind(this);
     this.handleSaveClick = this.handleSaveClick.bind(this);
@@ -61,7 +61,7 @@ class Capture extends React.Component {
     const photo = document.getElementById('photo');
     const context = canvas.getContext('2d');
     const { width, height } = this.state.constraints.video;
-    context.fillStyle = '#FFF';
+    context.fillStyle = '#2e3d49';
     context.fillRect(0, 0, width, height);
 
     const data = canvas.toDataURL('image/png');
@@ -150,29 +150,28 @@ class Capture extends React.Component {
 
   render() {
     return (
-      <div id="captureColumn"
-        style={ styles.simpleBoxColumn }
-      >
-        <div id="captureRow"
-          style={ styles.captureRow }
-        >
-          <Photo handleSaveClick={ this.handleSaveClick } />
-          <Camera
-            handleStartClick={ this.handleStartClick }
-          />
-          <canvas id="canvas"
-            style={ styles.picSize }
-            hidden
-          ></canvas>
+      <div>
+        <div id="groupTop">
+          <div id="captureColumn">
+            <div id="captureRow">
+              <Photo handleSaveClick={ this.handleSaveClick } />
+              <Camera
+                handleStartClick={ this.handleStartClick }
+              />
+              <canvas id="canvas"
+                hidden
+              ></canvas>
+            </div>
+            <Dashboard
+              downloadFinal={ this.downloadFinal }
+              finalPhoto={ this.props.finalPhoto }
+              groupName={ this.props.groupName }
+              handleSubmitFinal={ this.handleSubmitFinal }
+              isFinal={ this.props.isFinal }
+            />
+          </div>
           <LinkButton getLink={ this.getLink } />
         </div>
-        <Dashboard
-          downloadFinal={ this.downloadFinal }
-          finalPhoto={ this.props.finalPhoto }
-          groupName={ this.props.groupName }
-          handleSubmitFinal={ this.handleSubmitFinal }
-          isFinal={ this.props.isFinal }
-        />
       </div>
     );
   }

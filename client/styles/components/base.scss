@@ -1,0 +1,24 @@
+@import '../config/colors.scss';
+@import '../config/effects.scss';
+@import '../config/layout.scss';
+
+@mixin button() {
+  flex-grow: 1;
+  @include flex($justify: center);
+  background-color: $blueLight;
+  color: #fff;
+  box-shadow: $standardShadow;
+  cursor: pointer;
+  border-radius: 3px;
+  font-weigth: 500;
+}
+
+@mixin buttonText() {
+  align-self: center;
+  color: #fff;
+}
+
+html {
+  background-color: #fff;
+  font: sans-serif;
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import Download from './Dashboard/Download';
 import SubmitFinal from './Dashboard/SubmitFinal';
-import styles from './Dashboard/styles';
+import '../../styles/components/dashboard';
 const { bool, string, func } = React.PropTypes;
 
 const Dashboard = (props) => {
@@ -14,11 +14,9 @@ const Dashboard = (props) => {
     : [];
 
   return (
-    <div id="dashboard"
-      style={ styles.box }
-    >
-      { download }
+    <div id="dashboard">
       <SubmitFinal handleSubmitFinal={ props.handleSubmitFinal } />
+      { download }
     </div>
   );
 };

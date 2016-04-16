@@ -1,0 +1,11 @@
+@import 'client/styles/components/base';
+
+#downloadButton {
+  @include button();
+  margin: 10px;
+  
+  p {
+    @include buttonText();
+  }
+
+}

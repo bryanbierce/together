@@ -19,7 +19,6 @@ class Home extends React.Component {
 
   handleCreateClick() {
     const groupName = document.getElementById('inputGroup').value.split(' ').join('_');
-    //  call to database to see if group already exists
     this.props.history.push(`${groupName}`);
   }
 

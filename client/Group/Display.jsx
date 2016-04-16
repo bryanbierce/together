@@ -2,20 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Map, List } from 'immutable';
 import PhotoTile from './Display/PhotoTile';
+import '../styles/components/display';
 const { object, string } = React.PropTypes;
 
-const styles = {
-  box: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center'
-  }
-};
 
 const Display = (props) => (
-  <div id="display"
-    style={ styles.box }
-  >
+  <div id="display">
     {
       (() => {
         const PhotoTiles = [];

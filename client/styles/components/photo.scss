@@ -1,0 +1,25 @@
+@import 'client/styles/components/base';
+
+#photoBox {
+  @include flex($direction: column);
+  border: 10px solid $backgroundLight;
+  background-color: $backgroundLight;
+
+  #photo {
+    @include picSize();
+    align-self: center;
+    background-color: $font;
+  }
+
+  #saveButton {
+    @include button();
+    margin: 5 0 0 0;
+    height: 25px;
+
+    p {
+      @include buttonText();
+    }
+
+  }
+
+}

@@ -1,0 +1,13 @@
+@mixin flex($direction: row, $justify: flex-start, $alignI: stretch, $alignC: stretch, $wrap: nowrap) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $alignI;
+  align-content: $alignC;
+  flex-wrap: $wrap;
+}
+
+@mixin picSize() {
+  width: 400;
+  height: 300;
+}

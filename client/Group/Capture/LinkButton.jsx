@@ -1,16 +1,11 @@
 import React from 'react';
-import styles from './styles';
+import '../../styles/components/linkButton';
 const { func } = React.PropTypes;
 
 const LinkButton = (props) => (
-  <div
-    style={ styles.linkButtonWrapper }
-  >
-    <div
-      style={ styles.linkButton }
-    >
+  <div id="linkButton">
+    <div>
       <i className="fa fa-link fa-2x"
-        style={ styles.linkIcon }
         onClick={ props.getLink }
       />
     </div>

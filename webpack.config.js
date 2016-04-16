@@ -1,15 +1,15 @@
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const autoprefixer = require('autoprefixer')
+// const autoprefixer = require('autoprefixer')
 
-const sassLoaders = [
-  'css-loader',
-  'postcss-loader',
-  'sass-loader?indentedSyntax=sass&includePaths[]=' + path.resolve(__dirname, './client')
-]
+// const sassLoaders = [
+//   'css-loader',
+//   'postcss-loader',
+//   'sass-loader?indentedSyntax=sass&includePaths[]=' + path.resolve(__dirname, 'client')
+// ]
 
 const client = path.join(__dirname, 'client/app.jsx');
-const server = path.join(__dirname, 'server/server.js');
+// const server = path.join(__dirname, 'server/server.js');
 
 module.exports = {
   devtool: 'source-map',
@@ -20,7 +20,7 @@ module.exports = {
     filename: 'bundle.js'
   },
   resolve: {
-    extensions: ['', '.js', '.jsx', '.json', '.sass']
+    extensions: ['', '.js', '.jsx', '.json', '.scss']
   },
   stats: {
     colors: true,
@@ -38,7 +38,7 @@ module.exports = {
     loaders: [
       {
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract('style-loader', sassLoaders.join('!'))
+        loaders: ['style', 'css', 'postcss', 'sass']
       },
       {
         test: /\.jsx?$/,
@@ -50,10 +50,15 @@ module.exports = {
         loader: 'json-loader'
       }
     ],
-    plugins: [
-      new ExtractTextPlugin('public/style.css', {
-        allChunks: true
-      })
-    ]
+    // plugins: [
+    //   new ExtractTextPlugin('public/style.css', {
+    //         allChunks: true
+    //     })
+    // ]
+    // postcss: [
+    //   autoprefixer({
+    //     browsers: ['last 2 versions']
+    //   })
+    // ]
   }
 }

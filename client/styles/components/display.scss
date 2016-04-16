@@ -1,0 +1,5 @@
+@import 'client/styles/components/base';
+
+#display {
+  @include flex($wrap: wrap, $justify: center);
+}

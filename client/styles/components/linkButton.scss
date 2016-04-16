@@ -1,0 +1,24 @@
+@import 'client/styles/components/base';
+
+#linkButton {
+  @include flex($justify: flex-end)
+
+  div {
+    @include button();
+    margin: 15px;
+    height: 50px;
+    width: 50px;
+    border-radius: 100%;
+
+    i {
+      @include buttonText();
+    }
+
+  }
+
+  #roomLink {
+      position: absolute;
+      left: -999em;
+  }
+
+}

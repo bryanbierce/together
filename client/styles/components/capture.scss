@@ -1,0 +1,18 @@
+@import "client/styles/components/base.scss";
+
+#groupTop {
+  @include flex($direction: row, $justify: center);
+}
+
+#captureColumn {
+  @include flex($direction: column, $justify: center);
+  margin: 15px 0px;
+}
+
+#captureRow {
+  @include flex($direction: row);
+}
+
+#canvas {
+  @include picSize();
+}
