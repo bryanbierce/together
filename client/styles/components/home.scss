@@ -1,0 +1,36 @@
+@import 'client/styles/components/base';
+
+#home {
+  @include flex($direction: row, $justify: center, $alignC: center, $alignI: flex-start);
+  height: 100%;
+  background-color: $backgroundDark;
+}
+
+#homeContent {
+  @include flex($direction: column, $justify: center, $alignI: center);
+  width: 100%;
+  height: 66%;
+  background-color: $backgroundDark;
+}
+
+#homeHeader {
+  font-size: 4em;
+  color: $blueLight;
+}
+
+#homeInputGroup {
+  width: 33%;
+  height: 3em;
+  // border-radius: 3px;
+}
+
+#createBoothButton {
+  @include button($fg: 0);
+  width: 33%;
+  height: 3em;
+
+  p {
+    @include buttonText();
+  }
+
+}

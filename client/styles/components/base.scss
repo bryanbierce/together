@@ -2,14 +2,14 @@
 @import '../config/effects.scss';
 @import '../config/layout.scss';
 
-@mixin button() {
-  flex-grow: 1;
+@mixin button($fg: 1) {
+  flex-grow: $fg;
   @include flex($justify: center);
   background-color: $blueLight;
   color: #fff;
   box-shadow: $standardShadow;
   cursor: pointer;
-  border-radius: 3px;
+  // border-radius: 3px;
   font-weigth: 500;
 }
 
