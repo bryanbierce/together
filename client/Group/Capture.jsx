@@ -20,7 +20,7 @@ class Capture extends React.Component {
     };
 
     this.clearPhoto = this.clearPhoto.bind(this);
-    this.downloadFinal.bind(this);
+    this.downloadFinal = this.downloadFinal.bind(this);
     this.establishSocket = this.establishSocket.bind(this);
     this.getLink = this.getLink.bind(this);
     this.handleSaveClick = this.handleSaveClick.bind(this);
@@ -69,6 +69,7 @@ class Capture extends React.Component {
   }
 
   downloadFinal() {
+    console.log(this);
     window.open(this.props.finalPhoto, '_blank');
   }
 
@@ -124,7 +125,7 @@ class Capture extends React.Component {
 
   submitFinal() {
     const display = document.getElementById('display');
-
+    console.log(display);
     html2canvas(display, {
       onrendered: (canvas) => {
         const result = canvas.toDataURL('image/png');

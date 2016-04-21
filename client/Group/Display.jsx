@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { connect } from 'react-redux';
 import { Map, List } from 'immutable';
 import PhotoTile from './Display/PhotoTile';
@@ -7,16 +8,23 @@ const { object, string } = React.PropTypes;
 
 
 const Display = (props) => (
-  <div id="display">
-    {
-      (() => {
-        const PhotoTiles = [];
-        props.photos.forEach((photo, i) => {
-          PhotoTiles.push(<PhotoTile photoURL={ photo } key={ i } />);
-        });
-        return PhotoTiles;
-      })()
-    }
+  <div id="displayFrame">
+    <ReactCSSTransitionGroup
+      id="display"
+      transitionName="photoTile"
+      transitionEnterTimeout={500}
+      transitionLeaveTimeout={300}
+    >
+      {
+        (() => {
+          const PhotoTiles = [];
+          props.photos.forEach((photo, i) => {
+            PhotoTiles.push(<PhotoTile photoURL={ photo } key={ i } />);
+          });
+          return PhotoTiles;
+        })()
+      }
+    </ReactCSSTransitionGroup>
   </div>
 );
 Display.propTypes = {

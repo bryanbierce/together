@@ -2,6 +2,7 @@
 
 #groupTop {
   @include flex($direction: row, $justify: center);
+  margin: 0;
 }
 
 #captureColumn {

@@ -11,7 +11,7 @@ class Home extends React.Component {
   }
 
   handleCreateClick() {
-    const groupName = document.getElementById('inputGroup').value.split(' ').join('_');
+    const groupName = document.getElementById('homeInputGroup').value.split(' ').join('_');
     this.props.history.push(`${groupName}`);
   }
 

@@ -4,7 +4,19 @@
   @include picSize();
   margin: 10px;
   padding: 10px solid #fff;
+}
+
+.photoTile-enter {
   img {
-    @include picSize();
+    opacity: 0;
+  }
+
+}
+
+.photoTile-enter.photoTile-enter-active {
+  img {
+    // @include picSize();
+    opacity: 1;
+    transition: opacity 1000ms ease-in-out;
   }
 }
