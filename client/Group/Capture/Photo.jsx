@@ -1,21 +1,14 @@
 import React from 'react';
-import styles from './styles';
+import '../../styles/components/photo';
 const { func } = React.PropTypes;
 
 const Photo = (props) => (
-  <div className="output"
-    style={ styles.box }
-  >
-    <img id="photo" alt="Your photo"
-      style={ styles.capturePic }
-    />
+  <div id="photoBox">
+    <img id="photo" alt="Your photo" />
     <div id="saveButton"
       onClick={ props.handleSaveClick }
-      style={ styles.button }
     >
-      <a
-        style={ styles.buttonText }
-      >Save Photo</a>
+      <p>Save Photo</p>
     </div>
   </div>
 );

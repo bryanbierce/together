@@ -1,0 +1,6 @@
+@import 'client/styles/components/base';
+
+#dashboard {
+  @include flex();
+  background-color: $backgroundLight;
+}

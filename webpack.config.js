@@ -2,7 +2,6 @@ const path = require('path');
 const webpack = require('webpack');
 
 const client = path.join(__dirname, 'client/app.jsx');
-const server = path.join(__dirname, 'server/server.js');
 
 module.exports = {
   context: __dirname,
@@ -12,7 +11,7 @@ module.exports = {
     filename: 'bundle.js'
   },
   resolve: {
-    extensions: ['', '.js', '.jsx', '.json']
+    extensions: ['', '.js', '.jsx', '.json', '.scss']
   },
   stats: {
     colors: true,
@@ -20,14 +19,11 @@ module.exports = {
     chunks: false
   },
   module: {
-    // preLoaders: [
-    //   {
-    //     test: /\.jsx?$/,
-    //     loader: "eslint-loader",
-    //     exclude: /node_modules/
-    //   }
-    // ],
     loaders: [
+      {
+        test: /\.scss$/,
+        loaders: ['style', 'css', 'postcss', 'sass']
+      },
       {
         test: /\.jsx?$/,
         loader: 'babel-loader',

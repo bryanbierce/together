@@ -1,21 +1,15 @@
 import React from 'react';
-import styles from './styles';
+import '../../styles/components/camera';
 const { func } = React.PropTypes;
 
+
 const Camera = (props) => (
-  <div className="camera"
-    style={ styles.box }
-  >
-    <video id="video"
-      style={ styles.capturePic }
-    ></video>
+  <div id="camera">
+    <video id="video"></video>
     <div id="startButton"
       onClick={ props.handleStartClick }
-      style={ styles.button }
     >
-      <a
-        style={ styles.buttonText }
-      >Take Photo</a>
+      <p>Take Photo</p>
     </div>
   </div>
 );

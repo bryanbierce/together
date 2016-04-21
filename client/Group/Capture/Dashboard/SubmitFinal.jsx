@@ -1,20 +1,17 @@
 import React from 'react';
-import styles from './styles';
+import '../../../styles/components/submitfinal';
 const { func } = React.PropTypes;
 
 
 const SubmitFinal = (props) => (
     <div id="finalSubmitButton"
       onClick={ props.handleSubmitFinal }
-      style={ styles.button }
     >
-      <a
-        style={ styles.buttonText }
-      >Submit Group Photo</a>
+      <p>Submit Group Photo</p>
     </div>
 );
 SubmitFinal.propTypes = {
-  handleSubmitFinal: func
+  handleSubmitFinal: func,
 };
 
 export default SubmitFinal;

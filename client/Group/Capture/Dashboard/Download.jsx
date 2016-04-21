@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './styles';
+import '../../../styles/components/download';
 const { string, func } = React.PropTypes;
 
 const Download = (props) => (
@@ -7,11 +7,8 @@ const Download = (props) => (
       href={ props.finalPhoto }
       download={ `${props.groupName}-Together.png` }
       onClick={ props.downloadFinal }
-      style={ styles.button }
     >
-      <a
-        style={ styles.buttonText }
-      >Download Final Photo</a>
+      <p>Download Final Photo</p>
     </div>
 );
 Download.propTypes = {

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"golang.org/x/net/websocket"
 
@@ -43,7 +44,7 @@ func main() {
 
 	http.Handle("/", http.FileServer(http.Dir("./public")))
 
-	fmt.Println("Server running on port 4028")
+	fmt.Println("Server running on port " + port)
 	http.ListenAndServe(":"+port, nil)
 }
 
@@ -97,6 +98,7 @@ func handleAPI(s *re.Session) func(w http.ResponseWriter, req *http.Request) {
 					w.WriteHeader(201)
 					w.Write([]byte("Group created"))
 					req.Body.Close()
+					go scheduleCloseGroup(parts[3], 0)
 				}
 			} else if parts[2] == "postPhoto" {
 				decoder := json.NewDecoder(req.Body)
@@ -121,5 +123,25 @@ func handleAPI(s *re.Session) func(w http.ResponseWriter, req *http.Request) {
 			w.Write([]byte("You reached a dead end in the api!"))
 			req.Body.Close()
 		}
+	}
+}
+
+func scheduleCloseGroup(groupName string, attempts int) {
+	if attempts == 3 {
+		return
+	}
+	if attempts == 0 {
+		time.Sleep(72 * time.Hour)
+	}
+	attempts++
+
+	session, err := re.Connect(re.ConnectOpts{
+		Address:  "127.0.0.1:28015",
+		Database: "together",
+	})
+	if err == nil {
+		re.DB("together").TableDrop(groupName).Exec(session)
+	} else {
+		scheduleCloseGroup(groupName, attempts)
 	}
 }

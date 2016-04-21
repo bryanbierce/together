@@ -1,0 +1,13 @@
+@import 'client/styles/components/base';
+
+#displayFrame {
+@include flex($direction: column, $justify: center)
+  background-color: $backgroundLight;
+  padding: 20px;
+  margin: 0;
+}
+
+#display {
+  @include flex($direction: row, $wrap: wrap, $justify: center);
+  background-color: #fff;
+}
