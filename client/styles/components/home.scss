@@ -18,19 +18,8 @@
   color: $blueLight;
 }
 
-#homeInputGroup {
-  width: 33%;
-  height: 3em;
-  // border-radius: 3px;
-}
-
-#createBoothButton {
-  @include button($fg: 0);
-  width: 33%;
-  height: 3em;
-
-  p {
-    @include buttonText();
-  }
-
-}
+// #homeInputGroup {
+//   width: 33%;
+//   height: 3em;
+//   // border-radius: 3px;
+// }

@@ -1,0 +1,29 @@
+@import 'client/styles/components/base';
+
+#homeForm {
+  @include flex($direction: column, $justify: center);
+  width: 33%;
+
+  input {
+    height: 3em;
+  }
+
+}
+
+#homeFormGroup {
+
+}
+
+#homeFormPassword {
+
+}
+
+#createBoothButton {
+  @include button($fg: 0);
+  height: 3em;
+
+  p {
+    @include buttonText();
+  }
+
+}
