@@ -128,7 +128,7 @@ func scheduleCloseGroup(groupName string, attempts int) {
 		return
 	}
 	if attempts == 0 {
-		time.Sleep(72 * time.Hour)
+		time.Sleep(24 * time.Hour)
 	}
 	attempts++
 
