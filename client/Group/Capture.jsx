@@ -1,13 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { hashHistory } from 'react-router';
 import axios from 'axios';
 import Camera from './Capture/Camera';
 import Photo from './Capture/Photo';
-import LinkButton from './Capture/LinkButton';
+import CircleButton from './Capture/CircleButton';
 import Dashboard from './Capture/Dashboard.jsx';
 import actions from '../actions';
 import '../styles/components/capture';
-const { string, func, bool } = React.PropTypes;
+const { bool, func, object, string } = React.PropTypes;
 
 
 class Capture extends React.Component {
@@ -23,6 +24,7 @@ class Capture extends React.Component {
     this.downloadFinal = this.downloadFinal.bind(this);
     this.establishSocket = this.establishSocket.bind(this);
     this.getLink = this.getLink.bind(this);
+    this.goHome = this.goHome.bind(this);
     this.handleSaveClick = this.handleSaveClick.bind(this);
     this.handleSubmitFinal = this.handleSubmitFinal.bind(this);
     this.handleStartClick = this.handleStartClick.bind(this);
@@ -98,6 +100,10 @@ class Capture extends React.Component {
     document.execCommand('copy');
   }
 
+  goHome() {
+    hashHistory.push('/');
+  }
+
   handleSaveClick(event) {
     event.preventDefault();
     this.savePhoto();
@@ -153,6 +159,11 @@ class Capture extends React.Component {
     return (
       <div>
         <div id="groupTop">
+          <CircleButton
+            buttonId={ "homeButton" }
+            clickAction={ this.goHome }
+            linkIcon={ "fa fa-home fa-2x" }
+          />
           <div id="captureColumn">
             <div id="captureRow">
               <Photo handleSaveClick={ this.handleSaveClick } />
@@ -171,8 +182,16 @@ class Capture extends React.Component {
               isFinal={ this.props.isFinal }
             />
           </div>
-          <LinkButton getLink={ this.getLink } />
-        </div>
+          <CircleButton
+            buttonId={ "linkButton" }
+            getLink={ this.getLink }
+            linkIcon={ "fa fa-link fa-2x" }
+          >
+            <p id="roomLink"
+              style={{ position: 'absolute', left: '-999em' }}
+            >{ location.href.split('?')[0] }</p>
+          </CircleButton>
+          </div>
       </div>
     );
   }
@@ -181,6 +200,7 @@ Capture.propTypes = {
   addPhoto: func,
   finalPhoto: string,
   groupName: string,
+  history: object,
   isFinal: bool,
   submitFinal: func
 };
