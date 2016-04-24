@@ -18,6 +18,11 @@ type PhotoData struct {
 	HashID string `gorethink:"hashID"`
 }
 
+type GroupInfo struct {
+	GroupName string
+	Password  string
+}
+
 func main() {
 	session, err := re.Connect(re.ConnectOpts{
 		Address:  "127.0.0.1:28015",
@@ -85,18 +90,29 @@ func handleAPI(s *re.Session) func(w http.ResponseWriter, req *http.Request) {
 
 		if parts[1] == "group" {
 			if parts[2] == "create" {
-				err := re.DB("together").TableCreate(parts[3]).Exec(s)
+				decoder := json.NewDecoder(req.Body)
+				var info GroupInfo
 
+				err := decoder.Decode(&info)
 				if err != nil {
-					w.WriteHeader(200)
-					w.Write([]byte("Groupe exists"))
-					req.Body.Close()
+					fmt.Println("error extracting json")
+				}
+
+				err = re.DB("together").TableCreate(info.GroupName).Exec(s)
+				if err != nil {
+					w.WriteHeader(403)
+					w.Write([]byte("Group exists"))
 				} else {
+					_, err = re.DB("together").Table("passwords").Insert(info).RunWrite(s)
+					if err != nil {
+						fmt.Println("error inserting password")
+					}
 					w.WriteHeader(201)
 					w.Write([]byte("Group created"))
-					req.Body.Close()
-					go scheduleCloseGroup(parts[3], 0)
 				}
+
+				req.Body.Close()
+				// go scheduleCloseGroup(parts[3], 0)
 			} else if parts[2] == "postPhoto" {
 				decoder := json.NewDecoder(req.Body)
 				var photo PhotoData

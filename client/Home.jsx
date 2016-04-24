@@ -10,13 +10,7 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleCreateClick = this.handleCreateClick.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
-  }
-
-  handleCreateClick(event) {
-    const groupName = document.getElementById('homeInputGroup').value.split(' ').join('_');
-    // this.props.history.push(`${groupName}`);
   }
 
   handleFormSubmit(event) {
@@ -25,12 +19,11 @@ class Home extends React.Component {
     const groupName = userInput.clean(form.homeFormGroup.value).split(' ').join('-');
     const password = form.homeFormPassword.value;
     if (password.length && userInput.passCheck(password)) {
-      // axios.post(`/api/group/create/${groupName}`)
-      // .then(() => nextState)
-      // .catch(() => {
-      //   replace('/');
-      // });
-
+      axios.post(`/api/group/create/${groupName}`, { groupName, password })
+      .then((res) => console.log(res))
+      .catch((err) => {
+        console.log(err);
+      });
     }
     console.log(groupName, ' ', password, ' in handler');
   }
