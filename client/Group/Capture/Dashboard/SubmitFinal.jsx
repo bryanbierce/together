@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../../styles/components/submitfinal';
+import '../../../styles/components/submitFinal';
 const { func } = React.PropTypes;
 
 
