@@ -1,7 +1,9 @@
 import React from 'react';
+import axios from 'axios';
+import userInput from './utils/userInput';
 import GroupForm from './Home/GroupForm';
 import './styles/components/home';
-const { func } = React.PropTypes;
+const { object } = React.PropTypes;
 
 
 class Home extends React.Component {
@@ -9,6 +11,7 @@ class Home extends React.Component {
     super(props);
 
     this.handleCreateClick = this.handleCreateClick.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
   }
 
   handleCreateClick(event) {
@@ -16,9 +19,20 @@ class Home extends React.Component {
     // this.props.history.push(`${groupName}`);
   }
 
-  handleFormSubmit(target) {
-    target.event.preventDefault();
-    console.log('in handler');
+  handleFormSubmit(event) {
+    event.preventDefault();
+    const form = event.target;
+    const groupName = userInput.clean(form.homeFormGroup.value).split(' ').join('-');
+    const password = form.homeFormPassword.value;
+    if (password.length && userInput.passCheck(password)) {
+      // axios.post(`/api/group/create/${groupName}`)
+      // .then(() => nextState)
+      // .catch(() => {
+      //   replace('/');
+      // });
+
+    }
+    console.log(groupName, ' ', password, ' in handler');
   }
 
   render() {
@@ -33,7 +47,7 @@ class Home extends React.Component {
   }
 }
 Home.propTypes = {
-  history: func
+  history: object
 };
 
 
