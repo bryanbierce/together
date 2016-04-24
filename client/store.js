@@ -7,7 +7,12 @@ const initialState = new Map({
   groupName: '',
   photos: new Map(),
   finalPhoto: null,
-  isFinal: false
+  isFinal: false,
+  homeError: {
+    errorType: '',
+    groupName: '',
+    isError: false
+  }
 });
 
 const store = createStore(reducer, initialState, compose(
