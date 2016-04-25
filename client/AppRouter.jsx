@@ -1,35 +1,57 @@
 import React from 'react';
-import axios from 'axios';
 import { Router, Route, hashHistory } from 'react-router';
-import actions from './actions';
+import { connect } from 'react-redux';
 import Home from './Home';
+import GroupLogin from './GroupLogin';
 import Group from './Group';
-import store from './store.js';
+import { generateHash } from './utils';
+const { bool, string } = React.PropTypes;
+
 
 class AppRouter extends React.Component {
-  assignGroup(nextState, replace) {
+  constructor(props) {
+    super(props)
+
+    this.checkAuth = this.checkAuth.bind(this);
+  }
+
+  checkAuth(nextState, replace) {
     const groupName = nextState.params.groupName;
-    const action = actions.setGroup(groupName);
-    store.dispatch(action);
-    axios.post(`/api/group/create/${groupName}`)
-    .then(() => nextState)
-    .catch(() => {
-      replace('/');
-    });
+    if (!window.localStorage.getItem('com.pt-userHash')) {
+      const userHash = generateHash();
+      window.localStorage.setItem('com.pt-userHash', userHash);
+    }
+    if (!this.props.isAuthed) {
+      replace(`/groupLogin/${groupName}`);
+    }
+    return nextState;
   }
 
   render() {
     return (
       <Router history={ hashHistory }>
         <Route path="/" component={ Home } />
+        <Route path="groupLogin/:groupName" component={ GroupLogin } />
         <Route path="/:groupName"
           component={ Group }
-          history={ hashHistory }
-          onEnter={ this.assignGroup }
+          onEnter={ this.checkAuth }
         />
       </Router>
     );
   }
 }
+AppRouter.propTypes = {
+  groupName: string,
+  isAuthed: bool,
+  user: string,
+  userHash: string
+};
 
-module.exports = AppRouter;
+const mapStateToProps = (state) => ({
+  groupName: state.get('groupName'),
+  isAuthed: state.get('isAuthed'),
+  user: state.get('user'),
+  userHash: state.get('userHash')
+});
+
+module.exports = connect(mapStateToProps)(AppRouter);

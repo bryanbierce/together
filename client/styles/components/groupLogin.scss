@@ -1,0 +1,19 @@
+@import 'client/styles/components/base';
+
+#groupLogin {
+  @include flex($direction: column, $alignI: center);
+  height: 100%;
+  background-color: $backgroundDark;
+}
+
+#groupLoginContent {
+  @include flex($direction: column, $justify: flex-end, $alignI: center);
+  width: 100%;
+  height: 50%;
+  background-color: $backgroundDark;
+}
+
+#groupLoginHeader {
+  font-size: 4em;
+  color: $blueLight;
+}

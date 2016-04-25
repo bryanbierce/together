@@ -4,15 +4,22 @@ import { Map } from 'immutable';
 
 
 const initialState = new Map({
-  groupName: '',
-  photos: new Map(),
   finalPhoto: null,
-  isFinal: false,
+  groupName: '',
   homeError: {
     errorType: '',
     groupName: '',
     isError: false
-  }
+  },
+  isAuthed: false,
+  isFinal: false,
+  loginError: {
+    errorType: '',
+    isError: false
+  },
+  photos: new Map(),
+  user: '',
+  userHash: ''
 });
 
 const store = createStore(reducer, initialState, compose(

@@ -8,17 +8,25 @@ const ErrorBox = (props) => {
     errorDiv = (
       <div id="homeError">
         <p>That group already exists.
-          Would you like to <span id="homeErrorLink"
-            onClick={ props.navToGroup }>
+          Would you like to&nbsp;
+          <span id="homeErrorLink"
+            onClick={ props.errorGroupLink }
+          >
             join the group?
           </span>
         </p>
       </div>
     );
-  } else if (props.errorType === 'password') {
+  } else if (props.errorType === 'invalidPassword') {
     errorDiv = (
       <div id="homeError">
-        <p>Invalid password. Please use only letters and numbers</p>
+        <p>Invalid password. Please use only letters and numbers.</p>
+      </div>
+    );
+  } else if (props.errorType === 'incorrectPassword') {
+    errorDiv = (
+      <div id="homeError">
+        <p>Incorrect Password. Check with the group owner and try again.</p>
       </div>
     );
   }
@@ -26,7 +34,7 @@ const ErrorBox = (props) => {
 };
 ErrorBox.propTypes = {
   errorType: string,
-  navToGroup: func
+  errorGroupLink: func
 };
 
 module.exports = ErrorBox;

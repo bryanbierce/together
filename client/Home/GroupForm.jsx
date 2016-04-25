@@ -6,12 +6,16 @@ const GroupForm = (props) => (
   <form id="homeForm"
     onSubmit={ props.handleSubmit }
   >
+    <input id="homeFormUser"
+      placeholder="Your Name (Optional)"
+      type="text"
+    />
     <input id="homeFormGroup"
-      placeholder="Your group name"
+      placeholder="Your Group Name"
       type="text"
     />
     <input id="homeFormPassword"
-      placeholder="Password"
+      placeholder="Group Password"
       type="password"
     />
     <button id="createBoothButton"
@@ -22,7 +26,7 @@ const GroupForm = (props) => (
   </form>
 );
 GroupForm.propTypes = {
-  handleFormSubmit: func
+  handleSubmit: func
 };
 
 module.exports = GroupForm;

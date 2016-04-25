@@ -4,6 +4,8 @@ const addPhoto = (state, photo) => state.setIn(['photos', photo.hashID], photo.p
 
 const setHomeError = (state, errorObj) => state.set('homeError', new Map(errorObj));
 
+const setLoginError = (state, errorObj) => state.set('loginError', new Map(errorObj));
+
 const submitFinal = (state, finalPhoto) => state.set('finalPhoto', finalPhoto).set('isFinal', true);
 
 const reducer = (state = new Map(), action) => {
@@ -12,12 +14,24 @@ const reducer = (state = new Map(), action) => {
       return addPhoto(state, action.photo);
     case 'CLEAR_HOME_ERROR':
       return state.set('homeError', { errorType: '', groupName: '', isError: false });
-    case 'SET_STATE':
-      return action.newState;
+    case 'CLEAR_LOGIN_ERROR':
+      return state.set('loginError', { errorType: '', isError: false });
+    case 'REMOVE_AUTH':
+      return state.set('isAuthed', false);
+    case 'REMOVE_GROUP':
+      return state.set('groupName', '');
+    case 'SET_AUTH':
+      return state.set('isAuthed', true);
     case 'SET_GROUP_NAME':
       return state.set('groupName', action.groupName);
     case 'SET_HOME_ERROR':
       return setHomeError(state, action.errorObj);
+    case 'SET_LOGIN_ERROR':
+      return setLoginError(state, action.errorObj);
+    case 'SET_USER':
+      return state.set('user', action.user);
+    case 'SET_USER_HASH':
+      return state.set('userHash', action.userHash);
     case 'SUBMIT_FINAL':
       return submitFinal(state, action.finalPhoto);
     default:

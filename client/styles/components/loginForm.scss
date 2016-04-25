@@ -1,6 +1,6 @@
 @import 'client/styles/components/base';
 
-#homeForm {
+#loginForm {
   @include flex($direction: column, $justify: center);
   width: 33%;
 
@@ -10,11 +10,10 @@
 
 }
 
-#homeFormUser {}
-#homeFormGroup {}
-#homeFormPassword {}
+#loginFormUser {}
+#loginFormPassword {}
 
-#createBoothButton {
+#loginFormButton {
   @include button($fg: 0);
   height: 3em;
 }

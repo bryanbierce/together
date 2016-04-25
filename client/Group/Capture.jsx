@@ -20,6 +20,8 @@ class Capture extends React.Component {
       constraints: { audio: false, video: { width: 400, height: 300 } }
     };
 
+    this.componentDidMount = this.componentDidMount.bind(this);
+    this.componentWillUnmount = this.componentWillUnmount.bind(this);
     this.clearPhoto = this.clearPhoto.bind(this);
     this.downloadFinal = this.downloadFinal.bind(this);
     this.establishSocket = this.establishSocket.bind(this);
@@ -56,6 +58,11 @@ class Capture extends React.Component {
     this.establishSocket();
 
     this.clearPhoto();
+  }
+
+  componentWillUnmount() {
+    this.props.removeAuth();
+    this.props.removeGroup();
   }
 
   clearPhoto() {
@@ -202,13 +209,16 @@ Capture.propTypes = {
   groupName: string,
   history: object,
   isFinal: bool,
+  removeGroup: func,
   submitFinal: func
 };
 
 
 const mapDispatchToProps = (dispatch) => ({
   addPhoto: (photo) => dispatch(actions.addPhoto(photo)),
-  submitFinal: (finalPhoto) => dispatch(actions.submitFinal(finalPhoto))
+  submitFinal: (finalPhoto) => dispatch(actions.submitFinal(finalPhoto)),
+  removeAuth: () => dispatch(actions.removeAuth()),
+  removeGroup: () => dispatch(actions.removeGroup())
 });
 
 const mapStateToProps = (state) => ({
