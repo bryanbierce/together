@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import {userInput, generateHash } from './utils';
-import GroupForm from './Home/GroupForm';
-import ErrorBox from './Home/ErrorBox';
+import { userInput, generateHash } from './utils';
+import GroupForm from './Home/HomeForm';
+import ErrorBox from './Global/ErrorBox';
 import actions from './actions';
 import './styles/components/home';
 const { bool, func, object, string } = React.PropTypes;
@@ -28,7 +28,7 @@ class Home extends React.Component {
       this.props.setUserHash(userHash);
       document.getElementById('homeFormUser').value = user;
     }
-    document.getElementById('homeFormUser').focus();
+    document.getElementById('homeFormGroup').focus();
   }
 
   displayError() {
@@ -61,9 +61,16 @@ class Home extends React.Component {
 
     const groupName = userInput.clean(form.homeFormGroup.value).split(' ').join('-');
     const password = form.homeFormPassword.value;
+    const homeError = {
+      errorType: '',
+      groupName,
+      isError: true
+    };
 
-
-    if (password.length && userInput.passCheck(password)) {
+    if (!groupName.length) {
+      homeError.errorType = 'noGroupName';
+      this.props.setHomeError(homeError);
+    } else if (password.length && userInput.passCheck(password)) {
       axios.post(`/api/group/create/${groupName}`, { groupName, password })
       .then(() => {
         this.props.setGroup(groupName);
@@ -74,19 +81,14 @@ class Home extends React.Component {
         form.homeFormGroup.value = '';
         form.homeFormPassword.value = '';
         form.homeFormGroup.classList.add('invalidSubmission');
-        const homeError = {
-          errorType: 'groupName',
-          groupName,
-          isError: true
-        };
+        homeError.errorType = 'groupName';
         this.props.setHomeError(homeError);
       });
+    } else if (!password.length) {
+      homeError.errorType = 'noPassword';
+      this.props.setHomeError(homeError);
     } else {
-      const homeError = {
-        errorType: 'invalidPassword',
-        groupName,
-        isError: true
-      };
+      homeError.errorType = 'invalidPassword';
       this.props.setHomeError(homeError);
     }
   }

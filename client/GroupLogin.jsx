@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import LoginForm from './GroupLogin/LoginForm';
-import ErrorBox from './Home/ErrorBox';
+import ErrorBox from './Global/ErrorBox';
 import { userInput } from './utils';
 import actions from './actions';
 import './styles/components/groupLogin';
@@ -43,11 +43,16 @@ class GroupLogin extends React.Component {
     const groupName = this.props.params.groupName;
     const newUser = userInput.clean(form.loginFormUser.value);
     const password = form.loginFormPassword.value;
+    const loginError = {
+      errorType: '',
+      isError: true
+    };
 
     if (newUser !== this.props.user) {
       window.localStorage.setItem('com.pt-user', newUser);
       this.props.setUser(newUser);
     }
+
     if (password.length && userInput.passCheck(password)) {
       axios.post('/api/group/login', { groupName, password })
       .then(() => {
@@ -58,12 +63,16 @@ class GroupLogin extends React.Component {
       .catch(() => {
         form.loginFormPassword.value = '';
 
-        // TODO
-        this.props.setLoginError({ errorType: 'incorrectPassword', isError: true });
+        loginError.errorType = 'incorrectPassword';
+        this.props.setLoginError(loginError);
         form.loginFormPassword.focus();
       });
+    } else if (!password.length) {
+      loginError.errorType = 'noPassword';
+      this.props.setLoginError(loginError);
     } else {
-      this.props.setLoginError({ errorType: 'invalidPassword', isError: true });
+      loginError.errorType = 'invalidPassword';
+      this.props.setLoginError(loginError);
     }
   }
 

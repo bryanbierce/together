@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/components/groupForm';
+import '../styles/components/homeForm';
 const { func } = React.PropTypes;
 
 const GroupForm = (props) => (

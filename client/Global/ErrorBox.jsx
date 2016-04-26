@@ -3,10 +3,9 @@ import '../styles/components/errorBox';
 const { func, string } = React.PropTypes;
 
 const ErrorBox = (props) => {
-  let errorDiv;
+  let errorInternal;
   if (props.errorType === 'groupName') {
-    errorDiv = (
-      <div id="homeError">
+    errorInternal = (
         <p>That group already exists.
           Would you like to&nbsp;
           <span id="homeErrorLink"
@@ -15,22 +14,29 @@ const ErrorBox = (props) => {
             join the group?
           </span>
         </p>
-      </div>
     );
   } else if (props.errorType === 'invalidPassword') {
-    errorDiv = (
-      <div id="homeError">
+    errorInternal = (
         <p>Invalid password. Please use only letters and numbers.</p>
-      </div>
+    );
+  } else if (props.errorType === 'noPassword') {
+    errorInternal = (
+        <p>Please enter a password.</p>
     );
   } else if (props.errorType === 'incorrectPassword') {
-    errorDiv = (
-      <div id="homeError">
-        <p>Incorrect Password. Check with the group owner and try again.</p>
-      </div>
+    errorInternal = (
+      <p>Incorrect password. Check with the group owner and try again.</p>
+    );
+  } else if (props.errorType === 'noGroupName') {
+    errorInternal = (
+      <p>Please enter a group name.</p>
     );
   }
-  return errorDiv;
+  return (
+    <div id="homeError">
+      { errorInternal }
+    </div>
+  );
 };
 ErrorBox.propTypes = {
   errorType: string,
