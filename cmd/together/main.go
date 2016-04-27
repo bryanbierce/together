@@ -14,8 +14,8 @@ import (
 
 // PhotoData is a row in the db for an individual photo
 type PhotoData struct {
-	Photo  string `gorethink:"photo"`
-	HashID string `gorethink:"hashID"`
+	Photo    string `gorethink:"photo"`
+	UserHash string `gorethink:"userHash"`
 }
 
 // GroupInfo stores the groupName & password for each open group
@@ -123,7 +123,7 @@ func handleAPI(s *re.Session) func(w http.ResponseWriter, req *http.Request) {
 
 				_, err = re.DB("together").Table(parts[3]).Insert(photo).RunWrite(s)
 				if err != nil {
-					fmt.Println(err)
+					fmt.Println(err, "insterting photo")
 				}
 
 				w.WriteHeader(201)

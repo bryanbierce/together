@@ -1,6 +1,6 @@
 import { Map } from 'immutable';
 
-const addPhoto = (state, photo) => state.setIn(['photos', photo.hashID], photo.photo);
+const addPhoto = (state, photo) => state.setIn(['photos', photo.userHash], photo.photo);
 
 const setHomeError = (state, errorObj) => state.set('homeError', new Map(errorObj));
 
@@ -16,6 +16,8 @@ const reducer = (state = new Map(), action) => {
       return state.set('homeError', { errorType: '', groupName: '', isError: false });
     case 'CLEAR_LOGIN_ERROR':
       return state.set('loginError', { errorType: '', isError: false });
+    case 'CLEAR_PHOTOS':
+      return state.set('photos', new Map());
     case 'REMOVE_AUTH':
       return state.set('isAuthed', false);
     case 'REMOVE_GROUP':

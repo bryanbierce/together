@@ -22,12 +22,15 @@ class Home extends React.Component {
 
   componentDidMount() {
     const user = window.localStorage.getItem('com.pt-user');
+    let userHash = window.localStorage.getItem('com.pt-userHash');
     if (user) {
-      const userHash = window.localStorage.getItem('com.pt-userHash');
       this.props.setUser(user);
-      this.props.setUserHash(userHash);
       document.getElementById('homeFormUser').value = user;
     }
+    if (!userHash) {
+      userHash = generateHash();
+    }
+    this.props.setUserHash(userHash);
     document.getElementById('homeFormGroup').focus();
   }
 
@@ -54,9 +57,7 @@ class Home extends React.Component {
 
     if (!this.props.user) {
       const user = userInput.clean(form.homeFormUser.value);
-      const userHash = generateHash();
       window.localStorage.setItem('com.pt-user', user);
-      window.localStorage.setItem('com.pt-userHash', userHash);
     }
 
     const groupName = userInput.clean(form.homeFormGroup.value).split(' ').join('-');

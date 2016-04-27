@@ -3,7 +3,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import LoginForm from './GroupLogin/LoginForm';
 import ErrorBox from './Global/ErrorBox';
-import { userInput } from './utils';
+import { generateHash, userInput } from './utils';
 import actions from './actions';
 import './styles/components/groupLogin';
 const { bool, func, object, string } = React.PropTypes;
@@ -19,22 +19,26 @@ class GroupLogin extends React.Component {
 
   componentDidMount() {
     const user = window.localStorage.getItem('com.pt-user');
-    if (user && (user !== this.props.user)) {
+    let userHash = window.localStorage.getItem('com.pt-userHash');
+    if (user) {
       this.props.setUser(user);
     }
+    if (!userHash) {
+      userHash = generateHash();
+    }
+    this.props.setUserHash(userHash);
     document.getElementById('loginFormPassword').focus();
   }
 
   displayError() {
-    let result = '';
     if (this.props.isError) {
-      result = (
+      return (
         <ErrorBox
           errorType={ this.props.errorType }
         />
       );
     }
-    return result;
+    return '';
   }
 
   handleSubmit(event) {
@@ -58,6 +62,7 @@ class GroupLogin extends React.Component {
       .then(() => {
         this.props.setGroup(groupName);
         this.props.setAuth();
+        if (this.props.isError) this.props.clearLoginError();
         this.props.history.push(`/${groupName}`);
       })
       .catch(() => {

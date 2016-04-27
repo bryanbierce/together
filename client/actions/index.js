@@ -2,6 +2,7 @@ const actions = {
   addPhoto: (photo) => ({ type: 'ADD_PHOTO', photo }),
   clearHomeError: () => ({ type: 'CLEAR_HOME_ERROR' }),
   clearLoginError: () => ({ type: 'CLEAR_LOGIN_ERROR' }),
+  clearPhotos: () => ({ type: 'CLEAR_PHOTOS' }),
   removeAuth: () => ({ type: 'REMOVE_AUTH' }),
   removeGroup: () => ({ type: 'REMOVE_GROUP' }),
   setAuth: () => ({ type: 'SET_AUTH' }),
