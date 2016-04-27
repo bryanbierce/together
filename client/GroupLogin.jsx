@@ -3,7 +3,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import LoginForm from './GroupLogin/LoginForm';
 import ErrorBox from './Global/ErrorBox';
-import { generateHash, userInput } from './utils';
+import { generateHash, methodBinder, userInput } from './utils';
 import actions from './actions';
 import './styles/components/groupLogin';
 const { bool, func, object, string } = React.PropTypes;
@@ -12,9 +12,7 @@ class GroupLogin extends React.Component {
   constructor(props) {
     super(props);
 
-    this.componentDidMount = this.componentDidMount.bind(this);
-    this.displayError = this.displayError.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    methodBinder.call(this);
   }
 
   componentDidMount() {

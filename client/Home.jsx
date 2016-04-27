@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { userInput, generateHash } from './utils';
+import { generateHash, methodBinder, userInput } from './utils';
 import GroupForm from './Home/HomeForm';
 import ErrorBox from './Global/ErrorBox';
 import actions from './actions';
@@ -13,11 +13,7 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
 
-    this.componentDidMount = this.componentDidMount.bind(this);
-    this.displayError = this.displayError.bind(this);
-    this.errorGroupLink = this.errorGroupLink.bind(this);
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    this.navToGroup = this.navToGroup.bind(this);
+    methodBinder.call(this);
   }
 
   componentDidMount() {
@@ -100,6 +96,7 @@ class Home extends React.Component {
   }
 
   render() {
+    console.log(this);
     return (
       <div id="home">
         <div id="homeContent">

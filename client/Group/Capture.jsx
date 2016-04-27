@@ -6,7 +6,7 @@ import Camera from './Capture/Camera';
 import Photo from './Capture/Photo';
 import CircleButton from './Capture/CircleButton';
 import Dashboard from './Capture/Dashboard.jsx';
-import { generateHash } from '../utils';
+import { generateHash, methodBinder } from '../utils';
 import actions from '../actions';
 import '../styles/components/capture';
 const { bool, func, object, string } = React.PropTypes;
@@ -21,19 +21,7 @@ class Capture extends React.Component {
       constraints: { audio: false, video: { width: 400, height: 300 } }
     };
 
-    this.componentDidMount = this.componentDidMount.bind(this);
-    this.componentWillUnmount = this.componentWillUnmount.bind(this);
-    this.clearPhoto = this.clearPhoto.bind(this);
-    this.downloadFinal = this.downloadFinal.bind(this);
-    this.establishSocket = this.establishSocket.bind(this);
-    this.getLink = this.getLink.bind(this);
-    this.goHome = this.goHome.bind(this);
-    this.handleSaveClick = this.handleSaveClick.bind(this);
-    this.handleSubmitFinal = this.handleSubmitFinal.bind(this);
-    this.handleStartClick = this.handleStartClick.bind(this);
-    this.savePhoto = this.savePhoto.bind(this);
-    this.submitFinal = this.submitFinal.bind(this);
-    this.takePicture = this.takePicture.bind(this);
+    methodBinder.call(this);
   }
 
   componentDidMount() {

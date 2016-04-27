@@ -4,15 +4,15 @@ import { connect } from 'react-redux';
 import Home from './Home';
 import GroupLogin from './GroupLogin';
 import Group from './Group';
-import { generateHash } from './utils';
+import { generateHash, methodBinder } from './utils';
 const { bool, string } = React.PropTypes;
 
 
 class AppRouter extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
 
-    this.checkAuth = this.checkAuth.bind(this);
+    methodBinder.call(this);
   }
 
   checkAuth(nextState, replace) {
