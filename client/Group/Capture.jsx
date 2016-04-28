@@ -1,13 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { hashHistory } from 'react-router';
 import axios from 'axios';
 import Camera from './Capture/Camera';
 import Photo from './Capture/Photo';
-import LinkButton from './Capture/LinkButton';
+import CircleButton from './Capture/CircleButton';
 import Dashboard from './Capture/Dashboard.jsx';
+import { generateHash, methodBinder } from '../utils';
 import actions from '../actions';
 import '../styles/components/capture';
-const { string, func, bool } = React.PropTypes;
+const { bool, func, object, string } = React.PropTypes;
 
 
 class Capture extends React.Component {
@@ -19,16 +21,7 @@ class Capture extends React.Component {
       constraints: { audio: false, video: { width: 400, height: 300 } }
     };
 
-    this.clearPhoto = this.clearPhoto.bind(this);
-    this.downloadFinal = this.downloadFinal.bind(this);
-    this.establishSocket = this.establishSocket.bind(this);
-    this.getLink = this.getLink.bind(this);
-    this.handleSaveClick = this.handleSaveClick.bind(this);
-    this.handleSubmitFinal = this.handleSubmitFinal.bind(this);
-    this.handleStartClick = this.handleStartClick.bind(this);
-    this.savePhoto = this.savePhoto.bind(this);
-    this.submitFinal = this.submitFinal.bind(this);
-    this.takePicture = this.takePicture.bind(this);
+    methodBinder.call(this);
   }
 
   componentDidMount() {
@@ -51,9 +44,23 @@ class Capture extends React.Component {
       console.log(err);
     });
 
+    if (!this.props.userHash.length) {
+      let userHash = window.localStorage.getItem('com.pt-userHash');
+      if (!userHash) {
+        userHash = generateHash();
+      }
+      this.props.setUserHash(userHash);
+    }
+
     this.establishSocket();
 
     this.clearPhoto();
+  }
+
+  componentWillUnmount() {
+    this.props.removeAuth();
+    this.props.removeGroup();
+    this.props.clearPhotos();
   }
 
   clearPhoto() {
@@ -69,7 +76,6 @@ class Capture extends React.Component {
   }
 
   downloadFinal() {
-    console.log(this);
     window.open(this.props.finalPhoto, '_blank');
   }
 
@@ -98,6 +104,10 @@ class Capture extends React.Component {
     document.execCommand('copy');
   }
 
+  goHome() {
+    hashHistory.push('/');
+  }
+
   handleSaveClick(event) {
     event.preventDefault();
     this.savePhoto();
@@ -116,8 +126,8 @@ class Capture extends React.Component {
   savePhoto() {
     const photo = document.getElementById('photo').src;
     const groupName = this.props.groupName;
-    const hashID = location.hash.split('?')[1];
-    axios.post(`/api/group/postPhoto/${groupName}`, { photo, hashID })
+    const userHash = this.props.userHash;
+    axios.post(`/api/group/postPhoto/${groupName}`, { photo, userHash })
     .catch((err) => {
       console.log(err);
     });
@@ -125,7 +135,7 @@ class Capture extends React.Component {
 
   submitFinal() {
     const display = document.getElementById('display');
-    console.log(display);
+
     html2canvas(display, {
       onrendered: (canvas) => {
         const result = canvas.toDataURL('image/png');
@@ -153,6 +163,11 @@ class Capture extends React.Component {
     return (
       <div>
         <div id="groupTop">
+          <CircleButton
+            buttonId={ "homeButton" }
+            clickAction={ this.goHome }
+            linkIcon={ "fa fa-home fa-2x" }
+          />
           <div id="captureColumn">
             <div id="captureRow">
               <Photo handleSaveClick={ this.handleSaveClick } />
@@ -171,7 +186,15 @@ class Capture extends React.Component {
               isFinal={ this.props.isFinal }
             />
           </div>
-          <LinkButton getLink={ this.getLink } />
+          <CircleButton
+            buttonId={ "linkButton" }
+            getLink={ this.getLink }
+            linkIcon={ "fa fa-link fa-2x" }
+          >
+            <p id="roomLink"
+              style={{ position: 'absolute', left: '-999em' }}
+            >{ location.href.split('?')[0] }</p>
+          </CircleButton>
         </div>
       </div>
     );
@@ -179,22 +202,33 @@ class Capture extends React.Component {
 }
 Capture.propTypes = {
   addPhoto: func,
+  clearPhotos: func,
   finalPhoto: string,
   groupName: string,
+  history: object,
   isFinal: bool,
-  submitFinal: func
+  removeAuth: func,
+  removeGroup: func,
+  submitFinal: func,
+  setUserHash: func,
+  userHash: string
 };
 
 
 const mapDispatchToProps = (dispatch) => ({
   addPhoto: (photo) => dispatch(actions.addPhoto(photo)),
-  submitFinal: (finalPhoto) => dispatch(actions.submitFinal(finalPhoto))
+  clearPhotos: () => dispatch(actions.clearPhotos()),
+  submitFinal: (finalPhoto) => dispatch(actions.submitFinal(finalPhoto)),
+  removeAuth: () => dispatch(actions.removeAuth()),
+  removeGroup: () => dispatch(actions.removeGroup()),
+  setUserHash: (userHash) => dispatch(actions.setUserHash(userHash))
 });
 
 const mapStateToProps = (state) => ({
   finalPhoto: state.get('finalPhoto'),
   groupName: state.get('groupName'),
-  isFinal: state.get('isFinal')
+  isFinal: state.get('isFinal'),
+  userHash: state.get('userHash')
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Capture);

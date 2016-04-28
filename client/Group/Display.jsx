@@ -18,8 +18,10 @@ const Display = (props) => (
       {
         (() => {
           const PhotoTiles = [];
-          props.photos.forEach((photo, i) => {
-            PhotoTiles.push(<PhotoTile photoURL={ photo } key={ i } />);
+          props.photos.forEach((photo) => {
+            PhotoTiles.push(
+              <PhotoTile photoURL={ photo } key={ photo.userHash } />
+            );
           });
           return PhotoTiles;
         })()

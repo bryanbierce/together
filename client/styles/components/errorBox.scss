@@ -1,0 +1,21 @@
+@import 'client/styles/components/base';
+
+#homeError {
+  @include flex($justify:center)
+  width: 33%;
+  background-color: #fff;
+
+  p {
+    width:66%;
+    text-align: center;
+    
+    #homeErrorLink {
+      color: $blueLight;
+      &:hover {
+        color: darken($blueLight, 15%);
+      }
+    }
+
+  }
+
+}

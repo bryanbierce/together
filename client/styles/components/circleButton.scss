@@ -1,6 +1,6 @@
 @import 'client/styles/components/base';
 
-#linkButton {
+.circleButton {
   @include flex($justify: flex-end)
 
   div {

@@ -15,8 +15,14 @@ import (
 
 // PhotoData is a row in the db for an individual photo
 type PhotoData struct {
-	Photo  string `gorethink:"photo"`
-	HashID string `gorethink:"hashID"`
+	Photo    string `gorethink:"photo"`
+	UserHash string `gorethink:"userHash"`
+}
+
+// GroupInfo stores the groupName & password for each open group
+type GroupInfo struct {
+	GroupName string `gorethink:"groupName"`
+	Password  string `gorethink:"password"`
 }
 
 func main() {
@@ -85,23 +91,32 @@ func handleAPI(s *re.Session) func(w http.ResponseWriter, req *http.Request) {
 	return func(w http.ResponseWriter, req *http.Request) {
 		path := req.URL.Path
 		parts := strings.Split(path, "/")[1:]
+		decoder := json.NewDecoder(req.Body)
 
 		if parts[1] == "group" {
-			if parts[2] == "create" {
-				err := re.DB("together").TableCreate(parts[3]).Exec(s)
 
+			if parts[2] == "create" {
+				var group GroupInfo
+
+				err := decoder.Decode(&group)
 				if err != nil {
-					w.WriteHeader(200)
-					w.Write([]byte("Groupe exists"))
-					req.Body.Close()
+					fmt.Println("error extracting json")
+				}
+
+				err = re.DB("together").TableCreate(group.GroupName).Exec(s)
+				if err != nil {
+					w.WriteHeader(403)
+					w.Write([]byte("Group exists"))
 				} else {
+					_, err = re.DB("together").Table("passwords").Insert(group).RunWrite(s)
+					if err != nil {
+						fmt.Println("error inserting password")
+					}
 					w.WriteHeader(201)
 					w.Write([]byte("Group created"))
-					req.Body.Close()
-					go scheduleCloseGroup(parts[3], 0)
+					go scheduleCloseGroup(group, 0)
 				}
 			} else if parts[2] == "postPhoto" {
-				decoder := json.NewDecoder(req.Body)
 				var photo PhotoData
 
 				err := decoder.Decode(&photo)
@@ -111,37 +126,64 @@ func handleAPI(s *re.Session) func(w http.ResponseWriter, req *http.Request) {
 
 				_, err = re.DB("together").Table(parts[3]).Insert(photo).RunWrite(s)
 				if err != nil {
-					fmt.Println(err)
+					fmt.Println(err, "insterting photo")
 				}
 
 				w.WriteHeader(201)
 				w.Write([]byte("Photo saved"))
-				req.Body.Close()
+			} else if parts[2] == "login" {
+				var group GroupInfo
+
+				err := decoder.Decode(&group)
+				if err != nil {
+					fmt.Println("error extracting json")
+				}
+
+				result, err := re.DB("together").Table("passwords").Filter(group).Run(s)
+				if err != nil {
+					fmt.Printf("%v in find group password\n", err)
+				}
+
+				var value GroupInfo
+				var status int
+				var message string
+				if result.Next(&value) {
+					status = 200
+					message = "Login Successfull"
+				} else {
+					status = 403
+					message = "Incorrect Password"
+				}
+
+				w.WriteHeader(status)
+				w.Write([]byte(message))
 			}
 		} else {
 			w.WriteHeader(404)
 			w.Write([]byte("You reached a dead end in the api!"))
 			req.Body.Close()
 		}
+		req.Body.Close()
 	}
 }
 
-func scheduleCloseGroup(groupName string, attempts int) {
+func scheduleCloseGroup(group GroupInfo, attempts int) {
 	if attempts == 3 {
 		return
 	}
 	if attempts == 0 {
-		time.Sleep(72 * time.Hour)
+		time.Sleep(24 * time.Hour)
 	}
 	attempts++
 
-	session, err := re.Connect(re.ConnectOpts{
+	s, err := re.Connect(re.ConnectOpts{
 		Address:  "127.0.0.1:28015",
 		Database: "together",
 	})
 	if err == nil {
-		re.DB("together").TableDrop(groupName).Exec(session)
+		re.DB("together").TableDrop(group.GroupName).Exec(s)
+		re.DB("together").Table("passwords").Filter(group).Delete().RunWrite(s)
 	} else {
-		scheduleCloseGroup(groupName, attempts)
+		scheduleCloseGroup(group, attempts)
 	}
 }
