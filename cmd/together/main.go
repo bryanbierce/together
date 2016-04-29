@@ -182,9 +182,9 @@ func handleFileServing(w http.ResponseWriter, req *http.Request) {
 		contentType = "text/css"
 	} else if strings.HasSuffix(file, ".js") {
 		contentType = "application/javascript"
+	} else if strings.HasSuffix(file, ".ico") {
+		contentType = "image/x-icon"
 	}
-
-	fmt.Printf("%v contentType\n", contentType)
 
 	if contentType == "text/html" {
 		file = "index.html"
@@ -195,10 +195,8 @@ func handleFileServing(w http.ResponseWriter, req *http.Request) {
 	if err == nil {
 		w.Header().Add("Content-Type", contentType)
 		w.WriteHeader(200)
-
 		w.Write(data)
 	} else {
-		w.Header().Add("Content-Type", contentType)
 		w.WriteHeader(404)
 		w.Write([]byte("File does not exist"))
 	}
