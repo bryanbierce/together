@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { hashHistory } from 'react-router';
+import { browserHistory } from 'react-router';
 import axios from 'axios';
 import Camera from './Capture/Camera';
 import Photo from './Capture/Photo';
@@ -105,7 +105,7 @@ class Capture extends React.Component {
   }
 
   goHome() {
-    hashHistory.push('/');
+    browserHistory.push('/');
   }
 
   handleSaveClick(event) {

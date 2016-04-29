@@ -177,15 +177,10 @@ func handleFileServing(w http.ResponseWriter, req *http.Request) {
 	parts := strings.Split(req.URL.Path, "/")
 	file := parts[len(parts)-1]
 
-	fmt.Printf("%v parts\n", parts)
-	fmt.Printf("%v file\n", file)
-
 	contentType := "text/html"
 	if strings.HasSuffix(file, ".css") {
-		fmt.Println("IN .css IF")
 		contentType = "text/css"
 	} else if strings.HasSuffix(file, ".js") {
-		fmt.Println("IN .js IF")
 		contentType = "application/javascript"
 	}
 
