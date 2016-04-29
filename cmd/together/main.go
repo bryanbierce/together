@@ -92,8 +92,6 @@ func handleAPI(s *re.Session) func(w http.ResponseWriter, req *http.Request) {
 		parts := strings.Split(path, "/")[1:]
 		decoder := json.NewDecoder(req.Body)
 
-		fmt.Println("in api")
-
 		if parts[1] == "group" {
 
 			if parts[2] == "create" {
