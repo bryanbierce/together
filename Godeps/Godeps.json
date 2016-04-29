@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/bryanbierce/together/cmd/together",
+	"ImportPath": "github.com/bryanbierce/together",
 	"GoVersion": "go1.6",
 	"GodepVersion": "v61",
 	"Packages": [
