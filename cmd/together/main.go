@@ -188,10 +188,8 @@ func handleFileServing(w http.ResponseWriter, req *http.Request) {
 	if err == nil {
 		w.Header().Add("Content-Type", contentType)
 		w.WriteHeader(200)
-
 		w.Write(data)
 	} else {
-		w.Header().Add("Content-Type", contentType)
 		w.WriteHeader(404)
 		w.Write([]byte("File does not exist"))
 	}
