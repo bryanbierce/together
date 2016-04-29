@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"strings"
 	"time"
@@ -40,15 +41,21 @@ func main() {
 		},
 		Handler: websocket.Handler(groupConnect(session)),
 	}
+	// http.Handle("/sockets/groupConnect", websocket.Handler(server.Handler))
 
-	http.Handle("/sockets/groupConnect", websocket.Handler(server.Handler))
+	// http.HandleFunc("/api/", handleAPI(session))
 
-	http.HandleFunc("/api/", handleAPI(session))
+	// http.Handle("/", http.FileServer(http.Dir("../../public")))
 
-	http.Handle("/", http.FileServer(http.Dir("../../public")))
+	mux := http.NewServeMux()
+	mux.Handle("/sockets/groupConnect", websocket.Handler(server.Handler))
+	mux.HandleFunc("/api/", handleAPI(session))
+	mux.HandleFunc("/", handleFileServing)
+	// mux.Handle("/app", http.StripPrefix("/app", http.FileServer(http.Dir("../../public"))))
+	// mux.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir("./public"))))
 
 	fmt.Println("Server running on port 4028")
-	http.ListenAndServe(":4028", nil)
+	http.ListenAndServe(":4028", mux)
 }
 
 func groupConnect(s *re.Session) func(ws *websocket.Conn) {
@@ -89,6 +96,8 @@ func handleAPI(s *re.Session) func(w http.ResponseWriter, req *http.Request) {
 		path := req.URL.Path
 		parts := strings.Split(path, "/")[1:]
 		decoder := json.NewDecoder(req.Body)
+
+		fmt.Println("in api")
 
 		if parts[1] == "group" {
 
@@ -161,6 +170,42 @@ func handleAPI(s *re.Session) func(w http.ResponseWriter, req *http.Request) {
 			req.Body.Close()
 		}
 		req.Body.Close()
+	}
+}
+
+func handleFileServing(w http.ResponseWriter, req *http.Request) {
+	parts := strings.Split(req.URL.Path, "/")
+	file := parts[len(parts)-1]
+
+	fmt.Printf("%v parts\n", parts)
+	fmt.Printf("%v file\n", file)
+
+	contentType := "text/html"
+	if strings.HasSuffix(file, ".css") {
+		fmt.Println("IN .css IF")
+		contentType = "text/css"
+	} else if strings.HasSuffix(file, ".js") {
+		fmt.Println("IN .js IF")
+		contentType = "application/javascript"
+	}
+
+	fmt.Printf("%v contentType\n", contentType)
+
+	if contentType == "text/html" {
+		file = "index.html"
+	}
+
+	filePath := http.Dir("./public/" + file)
+	data, err := ioutil.ReadFile(string(filePath))
+	if err == nil {
+		w.Header().Add("Content-Type", contentType)
+		w.WriteHeader(200)
+
+		w.Write(data)
+	} else {
+		w.Header().Add("Content-Type", contentType)
+		w.WriteHeader(404)
+		w.Write([]byte("File does not exist"))
 	}
 }
 
