@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
@@ -44,14 +45,12 @@ func main() {
 		Handler: websocket.Handler(groupConnect(session)),
 	}
 
-	http.Handle("/sockets/groupConnect", websocket.Handler(server.Handler))
+	mux := http.NewServeMux()
+	mux.Handle("/sockets/groupConnect", websocket.Handler(server.Handler))
+	mux.HandleFunc("/api/", handleAPI(session))
+	mux.HandleFunc("/", handleFileServing)
 
-	http.HandleFunc("/api/", handleAPI(session))
-
-	http.Handle("/", http.FileServer(http.Dir("./public")))
-
-	fmt.Println("Server running on port " + port)
-	http.ListenAndServe(":"+port, nil)
+	http.ListenAndServe(port, mux)
 }
 
 func groupConnect(s *re.Session) func(ws *websocket.Conn) {
@@ -92,6 +91,8 @@ func handleAPI(s *re.Session) func(w http.ResponseWriter, req *http.Request) {
 		path := req.URL.Path
 		parts := strings.Split(path, "/")[1:]
 		decoder := json.NewDecoder(req.Body)
+
+		fmt.Println("in api")
 
 		if parts[1] == "group" {
 
@@ -164,6 +165,37 @@ func handleAPI(s *re.Session) func(w http.ResponseWriter, req *http.Request) {
 			req.Body.Close()
 		}
 		req.Body.Close()
+	}
+}
+
+func handleFileServing(w http.ResponseWriter, req *http.Request) {
+	parts := strings.Split(req.URL.Path, "/")
+	file := parts[len(parts)-1]
+
+	contentType := "text/html"
+	if strings.HasSuffix(file, ".css") {
+		contentType = "text/css"
+	} else if strings.HasSuffix(file, ".js") {
+		contentType = "application/javascript"
+	}
+
+	fmt.Printf("%v contentType\n", contentType)
+
+	if contentType == "text/html" {
+		file = "index.html"
+	}
+
+	filePath := http.Dir("./public/" + file)
+	data, err := ioutil.ReadFile(string(filePath))
+	if err == nil {
+		w.Header().Add("Content-Type", contentType)
+		w.WriteHeader(200)
+
+		w.Write(data)
+	} else {
+		w.Header().Add("Content-Type", contentType)
+		w.WriteHeader(404)
+		w.Write([]byte("File does not exist"))
 	}
 }
 

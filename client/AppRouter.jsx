@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Route, hashHistory } from 'react-router';
+import { Router, Route, browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import Home from './Home';
 import GroupLogin from './GroupLogin';
@@ -29,7 +29,7 @@ class AppRouter extends React.Component {
 
   render() {
     return (
-      <Router history={ hashHistory }>
+      <Router history={ browserHistory }>
         <Route path="/" component={ Home } />
         <Route path="groupLogin/:groupName" component={ GroupLogin } />
         <Route path="/:groupName"
