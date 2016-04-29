@@ -175,9 +175,9 @@ func handleFileServing(w http.ResponseWriter, req *http.Request) {
 		contentType = "text/css"
 	} else if strings.HasSuffix(file, ".js") {
 		contentType = "application/javascript"
+	} else if strings.HasSuffix(file, ".ico") {
+		contentType = "image/x-icon"
 	}
-
-	fmt.Printf("%v contentType\n", contentType)
 
 	if contentType == "text/html" {
 		file = "index.html"
