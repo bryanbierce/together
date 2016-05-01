@@ -50,7 +50,7 @@ func main() {
 	mux.HandleFunc("/api/", handleAPI(session))
 	mux.HandleFunc("/", handleFileServing)
 
-	http.ListenAndServe(port, mux)
+	http.ListenAndServe(":"+port, mux)
 }
 
 func groupConnect(s *re.Session) func(ws *websocket.Conn) {
