@@ -125,7 +125,7 @@ func handleAPI(s *re.Session) func(w http.ResponseWriter, req *http.Request) {
 
 				_, err = re.DB("together").Table(parts[3]).Insert(photo).RunWrite(s)
 				if err != nil {
-					fmt.Println(err, "insterting photo")
+					fmt.Println(parts[3], " insterting photo")
 				}
 
 				w.WriteHeader(201)
